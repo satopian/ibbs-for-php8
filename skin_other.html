@@ -1,0 +1,347 @@
+<html><head>
+<STYLE TYPE="text/css">
+<!--
+A:link{    /* 未リンク */
+	text-decoration:none;
+}
+A:visited{ /* 既リンク */
+	text-decoration:none;
+}
+A:hover  { /* リンク中 */
+	color:#F44646; text-decoration:underline;
+}
+BODY,TD,TH{/* 基本フォント&基本サイズ */
+	font-family:"ＭＳ Ｐゴシック"; font-size:10pt;
+}
+input,textarea,select{
+font-family     :ＭＳ ゴシック;   /*文字フォント*/
+font-size       :10pt;            /* 文字サイズ */
+color           :#349B31;         /*   文字色   */
+background-color:#FFFFFF;         /*   背景色   */
+border          :1 solid #749FF1; /*線の太さ、色*/
+}
+input{
+font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
+}
+-->
+</STYLE>
+
+<META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=Shift_JIS">
+<title>PHP-I=BOARD [{$num} RES]</title></head>
+<body text=#585858 link=#5C50CD vlink=#399563 bgcolor=#FFFFFF>
+<!--ヘッダ広告タグ挿入位置▽-->
+
+□<a href="{$self}?"> BACK</a>
+<table width=100% bgcolor=#749FF1><tr><th>{$title}</th></tr></table>
+
+<!--{def res_mode}-->
+<!--レス一覧 開始-->
+<br><center>
+<table width=80% bgcolor=#FFFFFF border=1 bordercolor="{$b_color}"><tr><td>
+<table width=100% border=0>
+<tr><th bgcolor={$b_color} colspan=3><font color=#ffffff>[{$num}] {$subj}</font></th></tr>
+<tr><td colspan=3>□投稿者/ {$name} <!--{def email}--> <a href="mailto:{$email}">＠</a><!--{/def}-->-<small>({$date})</small><!--{def url}--> <a href="{$url}" target=_top><img src="./Icon/home2.gif" width=15 height=15 border=0></a><!--{/def}--></td></tr>
+<tr><td width=10%><!--{def oyaicon}--><img src="{$oyaicon}" align=middle><!--{/def}--><br>[<a href="{$self}?num={$num}&mode=res&q={$num}#F">引用</a>]</td>
+<td width=90%><br><font color="{$color}">{$com}</font></td></tr>
+</table><br>
+<!--{def res}-->
+<hr size=1 color={$b_color}>
+<table width=100%><tr><td width=10%><br></td><td width=90%><table width=100%>
+
+<!--{each res}-->
+<tr><th colspan=2 bgcolor={$res/b_color}><font color=#ffffff>[{$res/num}] {$res/subj}</font></th></tr>
+<tr><td colspan=3>□投稿者/ {$res/name} <!--{def res/email}--> <a href="mailto:{$res/email}">＠</a><!--{/def}-->-<small>({$res/date})</small><!--{def res/url}--> <a href="{$res/url}" target=_top><img src="./Icon/home2.gif" width=15 height=15 border=0></a><!--{/def}--></td></tr>
+<tr><td valign=top width=10%><!--{def res/icon}--><img src="{$res/icon}" align=middle><br><!--{/def}-->Res{$res/cnt}<br>[<a href="{$self}?num={$num}&mode=res&q={$res/num}#F">引用</a>]</td>
+<td width=90%><br><font color="{$res/color}">{$res/com}<br></font><br></td></tr>
+<!--{/each}-->
+</table></td></tr></table>
+<!--{/def}-->
+<div align=right>
+<a href="{$self}?mode=res&num={$num}&res=old">先頭から{$res_def}件</a> /
+<a href="{$self}?mode=res&num={$num}&res=new">最新レス{$res_def}件</a> /
+<a href="{$self}?mode=res&num={$num}&res=all">全レス表示</a></div>
+</td></tr></table></center>
+<a name=F></a><center>
+<form action={$self} method=POST>
+<input type=hidden name=no value=0>
+<input type=hidden name=type value="{$num}">
+<input type=hidden name=page value=0>
+<input type=hidden name=mode value=write>
+<table>
+<tr><th colspan=6>△[{$num}] {$subj} へ返信</th></tr><tr>
+<td>Name</td><td>/<input type=text name="name" value="{$cname}" size=20 maxlength=32 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
+<td>E-Mail</td><td>/<input type=text name="email" value="{$cemail}" size=20 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
+<td>削除キー</td><td>/<input type=password maxlength=8 name="delkey" size=8 value="{$cpass}" onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';">
+</td></tr><tr>
+<td>Title</td><td>/<input type=text name="subject" size=20 value="{$rsubj}" onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';" maxlength=32></td>
+<td>URL</td><td colspan=3>/<input type=text name="url" value="http://{$curl}" size=50 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
+</tr>
+<tr><td colspan=6>Comment/半角{$maxcom}文字以内<br>
+　<textarea name="comment" rows=8 cols=65 wrap=soft onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';">{$rcom}</textarea></td></tr>
+<tr><td>文字色</td><td colspan=5>/
+<!--{each font}-->
+<input type=radio name=font value="{$font/color}"{$font/chk}><font color={$font/color}>■</font>
+<!--{/each}-->
+</td></tr><tr><td>枠線色</td><td colspan=3>/
+<!--{each hr}-->
+<input type=radio name=hr value="{$hr/color}"{$hr/chk}><font color={$hr/color}>■</font>
+<!--{/each}-->
+</td></tr><tr><td>Icon</td><td colspan=2>/<select name=ico>
+<!--{each icon}-->
+<option value="{$icon/file}"{$icon/sel}>{$icon/name}</option>
+<!--{/each}-->
+</select></td>
+<td colspan=4 align=right><input type=submit value=" レス " onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<input type=reset value="リセット" onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></td></tr></table></center></form>
+<!--レス一覧 終了-->
+<!--{/def}-->
+
+<!--{def edit_mode}-->
+<!--編集モード 開始-->
+<blockquote><form action="{$self}" method="POST">
+<input type=hidden name=delkey value="{$pass}">
+<input type=hidden name=mode value=rewrite>
+<input type=hidden name=num value={$num}>
+<table bgcolor=#FFFFFF align=center>
+<tr><td>Name</td><td>/<input type=text name="name" value="{$name}" size=35></td></tr>
+<tr><td>E-Mail</td><td>/<input type=text name="email" value="{$email}" size=35></td></tr>
+
+<tr><td>Title</td><td>/<input type=text name="subject" size=35 value="{$subj}"></td></tr>
+<tr><td>URL</td><td>/<input type=text name="url" value="http://{$url}" size=60></td></tr>
+<tr><td colspan=2>Comment▽ <small>(適当に改行を入れて下さい)</small><br>
+　<textarea name="comment" rows=12 cols=70 wrap=soft>{$com}</textarea></td></tr>
+<tr><td>文字色</td><td colspan=5>/
+<!--{each font}-->
+<input type=radio name=font value="{$font/color}"{$font/chk}><font color={$font/color}>■</font>
+<!--{/each}-->
+</td></tr><tr><td>枠線色</td><td colspan=3>/
+<!--{each hr}-->
+<input type=radio name=hr value="{$hr/color}"{$hr/chk}><font color={$hr/color}>■</font>
+<!--{/each}-->
+</td></tr><tr><td>Icon</td><td colspan=2>/<select name=ico>
+<!--{each icon}-->
+<option value="{$icon/file}"{$icon/sel}>{$icon/name}</option>
+<!--{/each}-->
+</select><small>(<a href='{$self}?mode=img' target=_blank>サンプル一覧</a>)</small></td><td>
+</td></tr><tr><td colspan=2 align=right><input type=submit value=" 編 集 ">
+<input type=reset value=リセット></td></tr></table></form></blockquote>
+<!--編集モード 終了-->
+<!--{/def}-->
+
+<!--{def admin}-->
+<!--管理モード 開始-->
+<ul>
+□ ログサイズ/{$size}バイト 記事数/{$total} <small>(親/{$oyakiji} レス/{$reskiji})</small><br>
+■ 記事を編集したい場合、その記事のタイトルをクリック。<br>
+■ 削除したい記事にチェックを入れ「削除」ボタンを押す。<br>
+□ 親記事を削除するとレス記事もすべて削除されます。
+</ul><center>
+
+<form action="{$self}" method=POST>
+<input type=hidden name=mode value="del">
+<input type=hidden name=delkey value="{$pass}">
+<table border=1 width=90% bordercolor=#749FF1>
+<tr bgcolor=#749FF1><th>チェック</th><th colspan=2>記事NO</th>
+<th>タイトル</th><th>投稿者</th><th>コメント</th></tr>
+<!--{each oya}-->
+<tr><th><input type=checkbox name="del[]" value="{$oya/num}"></th>
+<th nowrap>親記事</th><td align=center>{$oya/num}</td><td>
+<a href="{$self}?mode=edit&delkey={$pass}&del={$oya/num}">{$oya/subj}</a></td>
+<td>{$oya/name} <!--{def oya/email}--><a href="mailto:{$oya/email}">＠</a><!--{/def}--><br><font size=2>{$oya/host}</font></td><td>{$oya/com}</td></tr>
+<!--{each oya/res}-->
+<tr><th><input type=checkbox name="del[]" value="{$oya/res/num}"></th>
+<td align=center colspan=2>{$oya/res/num}<br><small>[{$oya/num}-{$oya/res/cnt}]</small></td><td>
+<a href="{$self}?mode=edit&delkey={$pass}&del={$oya/res/num}">{$oya/res/subj}</a></td>
+<td>{$oya/res/name} <!--{def oya/res/email}--><a href="mailto:{$oya/res/email}">＠</a><!--{/def}--><br><font size=2>{$oya/res/host}</font></td><td>{$oya/res/com}</td></tr>
+<!--{/each}-->
+<!--{/each}-->
+</table><br><input type=submit value=" 削除 ">
+<input type=reset value="リセット"></form>
+<!--{def prev}--><b>[<a href="{$prev}">前の{$page_def}件</a>]</b><!--{/def}-->&nbsp;
+<!--{def next}--><b>[<a href="{$next}">次の{$page_def}件</a>]</b><!--{/def}-->
+<br><br>Page : {$paging}
+<hr width=90%>
+</center>
+<!--管理モード 終了-->
+<!--{/def}-->
+
+<!--{def search_mode}-->
+<!--検索モード 開始-->
+<center><table><tr><td>
+・ キーワードを複数指定する場合は 半角スペース で区切ってください。<br>
+・ 検索条件は、(AND)=[A かつ B] (OR)=[A または B] となっています。<br>
+
+</td></tr></table>
+<hr width=90%>
+<form action="{$self}" method=GET>
+<input type=hidden name=mode value=s>
+<table><tr>
+<td bgcolor=#749FF1>キーワード</td><td>/ <input type=text name=w size=20 value="{$word}" onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
+<td bgcolor=#749FF1>検索条件</td>
+<td>/ <select name=andor><option value=and>AND<option value=or>OR</select></td></tr>
+<tr><td bgcolor=#749FF1>検索範囲</td><td>/ <select name=logs>
+<option value="0">現在のログ
+<!--{each past}-->
+<option value="{$past/no}"{$past/sel}>過去ログ{$past/no}</option>
+<!--{/each}-->
+</select></td>
+<td bgcolor=#749FF1>強調表示</td><td>/ <input type=checkbox name=kyo value=1 onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';">ON
+<small>(自動リンクOFF)</small></td></tr>
+<tr><td bgcolor=#749FF1>結果表示件数</td><td>/ <select name=pp>
+<option value=20 selected>20件
+<option value=30>30件
+<option value=40>40件
+<option value=50>50件
+</select></td><td colspan=2 align=right>
+<input type=submit value=" 検 索 " onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<input type=reset value="リセット" onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+</td></tr></table></form></center>
+
+<!--{def out}-->
+<center><hr width=90%><h3>{$logname}</h3>
+<b>ヒット / {$total}件</b> ({$st}-{$to}を表示) / 
+Page : {$paging}
+<form action="{$self}" method=POST>
+<input type=hidden name=mode value="del">
+<input type=hidden name=logs value="0">
+
+<!--{each out}-->
+<table width=80% bgcolor=#FFFFFF border=1><tr><td>
+<table width=100%><tr><th bgcolor=#749FF1>
+<font color=#ffffff>No.{$out/num}/{$out/subj}</font></th></tr><tr><td nowrap>
+■投稿者/ {$out/name} -<small>({$out/date})<br><!--{$out/host}--></small></td>
+</tr><tr><td><br><ul>{$out/com}</ul></td>
+</table><div align=right><!--{def out/oya}-->親記事<!--{/def}-->
+<!--{def out/res}-->No.{$out/res} のレス<!--{/def}-->
+ /
+<a href="{$self}?mode=s&all=1&w={$out/num}&logs={$logs}">関連記事表示</a><br>
+削除チェック/<input type=checkbox name=del value={$out/num} onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></div></td></tr></table><br>
+<!--{/each}-->
+<!--{def prev}--><b>[<a href="{$prev}">前の{$page_def}件</a>]</b><!--{/def}-->&nbsp;
+<!--{def next}--><b>[<a href="{$next}">次の{$page_def}件</a>]</b><!--{/def}-->
+<br><br>Page : {$paging}
+</center>
+<hr width=90%>
+<div align=right>パスワード/<input type=password name=pas size=4 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';">
+<input type=submit value="管理用" onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></form></div>
+<!--{/def}-->
+<!--検索モード 終了-->
+<!--{/def}-->
+
+<!--{def past_mode}-->
+<!--過去ログモード 開始-->
+<center><!--{def logs}--><h3>{$logname}</h3><!--{/def}-->
+<table><tr><th>表示ログ</th><td>
+<!--{each past}-->
+<!--{def past/link}--><a href="{$self}?mode=log&logs={$past/no}"><!--{/def}-->過去ログ{$past/no}</a> {$past/br}
+<!--{/each}-->
+</td></tr></table><br>過去ログ検索は <a href="{$self}?mode=s">SEARCH</a> より行えます。
+<!--{def out}-->
+<hr width=90%>
+
+<b>記事数 / {$total}件</b> ({$st}-{$to}を表示) / Page : {$paging}<br>
+<form action="{$self}" method=POST>
+<input type=hidden name=mode value="del">
+<input type=hidden name=logs value="{$logs}">
+
+<!--{each out}-->
+<table width=80% bgcolor=#FFFFFF border=1><tr><td>
+<table width=100%><tr><th bgcolor=#749FF1>
+<font color=#ffffff>No.{$out/num}/{$out/subj}</font></th></tr><tr><td nowrap>
+■投稿者/ {$out/name} -<small>({$out/date})<br><!--{$out/host}--></small></td>
+</tr><tr><td><br><ul>{$out/com}</ul></td>
+</table><div align=right><!--{def out/oya}-->親記事<!--{/def}-->
+<!--{def out/res}-->No.{$out/res} のレス<!--{/def}-->
+ /
+<a href="{$self}?mode=s&all=1&w={$out/num}&logs={$logs}">関連記事表示</a><br>
+削除チェック/<input type=checkbox name=del value={$out/num} onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></div></td></tr></table><br>
+<!--{/each}-->
+<!--{def prev}--><b>[<a href="{$prev}">前の{$page_def}件</a>]</b><!--{/def}-->&nbsp;
+<!--{def next}--><b>[<a href="{$next}">次の{$page_def}件</a>]</b><!--{/def}-->
+<br><br>Page : {$paging}
+</center>
+<hr width=90%>
+<div align=right>パスワード/<input type=password name=pas size=4 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';">
+<input type=submit value="管理用" onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></form></div>
+<!--{/def}-->
+<!--過去ログモード 終了-->
+<!--{/def}-->
+
+<!--{def img_mode}-->
+<!--アイコン一覧 開始-->
+<br><center><a href="javascript:close()">ウィンドウを閉じる</a><br><br>
+<table border=1 bordercolor=#749FF1 width=500>
+<tr>
+<!--{each icon}-->
+<th width=100><img src="{$icon/file}"><br>{$icon/name}</th>{$icon/tr}
+<!--{/each}-->
+</tr>
+</table></center><br>
+<!--アイコン一覧 終了-->
+<!--{/def}-->
+
+<!--{def man_mode}-->
+<table width=65% align=center bgcolor=#FFFFFF><tr><td>
+<ul type="square">
+<li>この掲示板 (以下BBS) はタグを<b>使用できません。</b></li>
+<li>記事は<b>最大{$maxlog}件まで</b>保持できます。</li>
+<li>他人を中傷するような記事は管理者の判断で予告無く削除する場合があります。</li>
+<li><b>名前、コメントは必須記入項目</b>です。記入漏れするとエラーになります。</li>
+<li>このBBSは、<b>クッキー対応</b>です。(ブラウザでクッキー有効にしている時に限り)</li>
+<li>このBBSは<b>返信機能</b>があり、親記事のフォームをクリックし返信します。</li>
+<li><b>削除キー</b>を覚えておくと、一番下のフォームから<b>自分の記事の削除</b>ができます。
+削除した記事が親記事だった場合、レス記事もすべて削除されます。</li>
+
+</ul></td></tr></table></center>
+<!--{/def}-->
+<!--{def err_mode}-->
+<!--エラー画面-->
+<br><br><center>{$error}</center><br><br>
+<!--{/def}-->
+
+<!--{def post_mode}-->
+<!--新規投稿フォーム用-->
+<center>
+<form action="{$self}" method="POST">
+<input type=hidden name=mode value=write><input type=hidden name=type value=0>
+
+<table bgcolor=#FFFFFF>
+<tr><td bgcolor=#749FF1>Name</td>
+<td>/<input type=text name="name" value="{$cname}" size=25 maxlength=32 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
+<td bgcolor=#749FF1>E-Mail</td>
+<td>/<input type=text name="email" value="{$cemail}" size=25 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
+
+<tr><td bgcolor=#749FF1>Title</td><td>/<input type=text name="subject" size=25 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';" maxlength=32></td>
+
+<td bgcolor=#749FF1>削除キー</td>
+<td>/<input type=password name=delkey value="{$cpass}" size=8 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';">
+<small>(半角8文字以内)</small></td></tr>
+<tr><td colspan=4 bgcolor=#749FF1>Comment/ <small>(適当に改行を入れて下さい/半角{$maxcom}文字以内)</small><br>
+　<textarea name=comment rows=8 cols=70 wrap=soft onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></textarea></td></tr>
+
+<tr><td bgcolor=#749FF1>URL</td>
+<td colspan=3>/<input type=text name="url" value="http://{$curl}" size=65 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
+<tr><td bgcolor=#749FF1>文字色</td><td colspan=3>/
+<!--{each font}-->
+<input type=radio name=font value="{$font/color}"{$font/chk}><font color={$font/color}>■</font>
+<!--{/each}-->
+</td></tr><tr><td bgcolor=#749FF1>枠線色</td><td colspan=3>/
+<!--{each hr}-->
+<input type=radio name=hr value="{$hr/color}"{$hr/chk}><font color={$hr/color}>■</font>
+<!--{/each}-->
+</td></tr><tr><td bgcolor=#749FF1>Icon</td><td colspan=2>/<select name=ico>
+<!--{each icon}-->
+<option value="{$icon/file}"{$icon/sel}>{$icon/name}</option>
+<!--{/each}-->
+</select><small>(画像を選択/<a href='{$self}?mode=img' target=_blank>サンプル一覧</a>)</small></td>
+<td><input type=submit value="送 信" onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<input type=reset value="リセット" onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></td></tr></table></form>
+</center>
+<!--{/def}-->
+
+<!--著作権表示 削除しないでください-->
+<hr width=90%><center>- <a href="http://php.s3.to/" target=_top>レッツPHP!</a> refer to <a href="http://www.cj-c.com/" target="_top">I-BOARD</a> -</center>
+<!--フッタ広告タグ挿入位置▽-->
+
+<!--△ここまで-->
+</body></html>
