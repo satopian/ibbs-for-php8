@@ -1,5 +1,5 @@
 <html><head>
-
+	<!-- <% echo(self) %> -->
 <STYLE TYPE="text/css">
 <!--
 A:link{    /* 未リンク */
@@ -39,9 +39,9 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 <font color=#8187FC>{$count}</font></td></tr></table>
 <hr width=90%>
 □<a href="http://php.s3.to"> HOME</a>　
-□<a href="{$self}?mode=man"> HELP</a>　
-□<a href="{$self}?mode=s"> SEARCH</a>　
-<!--{def kako}-->□ <a href="{$self}?mode=log">過去ログ</a><!--{/def}-->
+□<a href="<% echo(self) %>?mode=man"> HELP</a>　
+□<a href="<% echo(self) %>?mode=s"> SEARCH</a>　
+<!--{def kako}-->□ <a href="<% echo(self) %>?mode=log">過去ログ</a><!--{/def}-->
 
 <hr width=80%><table><tr><td>
 <small>
@@ -51,93 +51,96 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 
 </td></tr></table><hr width=80%>
 
-<form action="{$self}" method="POST">
+<form action="<% echo(self) %>" method="POST">
 <input type=hidden name=mode value=write><input type=hidden name=type value=0>
 
 <table bgcolor=#FFFFFF>
 <tr><td bgcolor=#749FF1>Name</td>
-<td>/<input type=text name="name" value="{$cname}" size=25 maxlength=32 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
+<td>/<input type=text name="name" value="<% echo(cname) %>" size=25 maxlength=32 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
 <td bgcolor=#749FF1>E-Mail</td>
-<td>/<input type=text name="email" value="{$cemail}" size=25 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
+<td>/<input type=text name="email" value="<% echo(cemail) %>" size=25 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
 
 <tr><td bgcolor=#749FF1>Title</td><td>/<input type=text name="subject" size=25 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';" maxlength=32></td>
 
 <td bgcolor=#749FF1>削除キー</td>
-<td>/<input type=password name=delkey value="{$cpass}" size=8 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';">
+<td>/<input type=password name=delkey value="<% echo(cpass)%>" size=8 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';">
 <small>(半角8文字以内)</small></td></tr>
 <tr><td colspan=4 bgcolor=#749FF1>Comment/ <small>(適当に改行を入れて下さい/半角{$maxcom}文字以内)</small><br>
 　<textarea name=comment rows=8 cols=70 wrap=soft onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></textarea></td></tr>
 
 <tr><td bgcolor=#749FF1>URL</td>
-<td colspan=3>/<input type=text name="url" value="http://{$curl}" size=65 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
+<td colspan=3>/<input type=text name="url" value="http://<% echo(curl)%>" size=65 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
 <tr><td bgcolor=#749FF1>文字色</td><td colspan=3>/
-<!--{each font}-->
-<input type=radio name=font value="{$font/color}"{$font/chk}><font color={$font/color}>■</font>
-<!--{/each}-->
+<% each(font)%>
+<input type=radio name=font value="<% echo(font/color) %>"<% echo(font/chk)%>><font color="<% echo(font/color) %>">■</font>
+<% /each %>
 </td></tr><tr><td bgcolor=#749FF1>枠線色</td><td colspan=3>/
-<!--{each hr}-->
-<input type=radio name=hr value="{$hr/color}"{$hr/chk}><font color={$hr/color}>■</font>
-<!--{/each}-->
+<% each(hr)%>
+<input type=radio name=hr value="<% echo(hr/color)%>"<%echo(hr/chk)%>><font color="<% echo(hr/color)%>">■</font>
+<% /each %>
 </td></tr><tr><td bgcolor=#749FF1>Icon</td><td colspan=2>/<select name=ico>
-<!--{each icon}-->
-<option value="{$icon/file}"{$icon/sel}>{$icon/name}</option>
-<!--{/each}-->
-</select><small>(画像を選択/<a href='{$self}?mode=img' target=_blank>サンプル一覧</a>)</small></td>
+<% each(icon)%>
+<option value="<% echo(icon/file) %>"<% echo(icon/sel)%>><% echo(icon/name)%></option>
+<% /each %>
+</select><small>(画像を選択/<a href='<% echo(self) %>?mode=img' target=_blank>サンプル一覧</a>)</small></td>
 <td><input type=submit value="送 信" onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';">
 <input type=reset value="リセット" onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></td></tr></table></form>
 <a name=list></a><table width=80% border=1 cellpadding=5 cellspaciing=1 bordercolor=#749FF1><tr>
 <td bgcolor=#FFFFFF>
 <!--{each headline}-->
-<a href="{$headline/url}">{$headline/subj}({$headline/cnt})</a> /
+<a href="<% echo(headline/url)%>"><% echo(headline/subj)%>(<% echo(headline/cnt)%>)</a> /
 <!--{/each}-->
 </td></tr></table><br>
 
 <!--{each oya}-->
-<a name="{$oya/num}"><hr width=95%></a><br>
-<table width=80% bgcolor=#FFFFFF border=1 cellpadding=3 cellspaciing=0 bordercolor={$oya/b_color}><tr><td>
+<% each(oya) %>
+<a name="<% echo($oya/num) %>"><hr width=95%></a><br>
+<table width=80% bgcolor=#FFFFFF border=1 cellpadding=3 cellspaciing=0 bordercolor=<% echo(oya/b_color) %>><tr><td>
 <table width=100% border=0 cellpadding=1 cellspacing=0>
-<tr bgcolor={$oya/b_color}><th height=20 colspan=3><font color=#ffffff>[{$oya/num}] {$oya/subj}</font></th></tr>
-<tr><td colspan=3><a href="#list">■</a> {$oya/name}<!--{def oya/email}--> <a href="mailto:{$oya/email}">＠</a><!--{/def}-->-<small>({$oya/date})</small><!--{def oya/url}--> <a href="{$oya/url}" target=_top><img src="./Icon/home2.gif" width=15 height=15 border=0></a><!--{/def}--></td></tr>
-<tr><td width=5%></td><td width=10%><!--{def oya/icon}--><img src="{$oya/icon}"><!--{/def}-->
-<br>[<a href="{$self}?num={$oya/num}&mode=res&q={$oya/num}#F">引用</a>]</td>
-<td width=85%><br><font color="{$oya/color}">{$oya/com}</font></td></tr></table><br>
+<tr bgcolor=<% echo(oya/b_color)%>><th height=20 colspan=3><font color=#ffffff>[<% echo(oya/num) %>] <% ecgi(oya/subj)%></font></th></tr>
+<tr><td colspan=3><a href="#list">■</a> <% echo(oya/name) %><% def(oya/email) %> <a href="mailto:<% echo(oya/email)%>">＠</a><% /def %>-<small>(<% echo(oya/date) %>)</small><% def(oya/url) %> <a href="<% echo(oya/url) %>" target=_top><img src="./Icon/home2.gif" width=15 height=15 border=0></a><% /def %></td></tr>
+<tr><td width=5%></td><td width=10%><% def(oya/icon)%><img src="<% echo(oya/icon)%>"><% /def %>
+<br>[<a href="<% echo(self) %>?num=<% echo(oya/num)%>&mode=res&q=<% echo(oya/num)%>#F">引用</a>]</td>
+<td width=85%><br><font color="<% echo(oya/color)%>"><% echo(oya/com)%></font></td></tr></table><br>
 
 <div align=right>
-<form action={$self} method=GET>
-<input type=hidden name=num value={$oya/num}>
+<form action=<% echo(self) %> method=GET>
+<input type=hidden name=num value=<% echo($oya/num)%>
 <input type=hidden name=mode value=res>
 <input type=submit value=" レスする " onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></form></div>
-<!--{def oya/res}-->
-<hr color={$oya/b_color} size=1><table width=100%><tr>
+<% def(oya/res) %>
+<hr color=<% echooya/b_color)%> size=1><table width=100%><tr>
 <td width=10%><br></td><td width=90%><table width=100%>
 
-<!--{each oya/res}-->
-<tr><th bgcolor={$oya/res/b_color} colspan=2><font color=#5B5B5B>[{$oya/res/num}] {$oya/res/subj}</font></th></tr>
-<tr><td colspan=2>□ {$oya/res/name}<!--{def oya/res/email}--> <a href="mailto:{$oya/res/email}">＠</a><!--{/def}-->-<small>({$oya/res/date}<!--{def oya/res/url}-->/<a href="{$oya/res/url}" target=_top>URL</a><!--{/def}-->)/Res{$oya/res/cnt}</small><br></td></tr>
-<tr><td width=10%><!--{def oya/res/icon}--><img src="{$oya/res/icon}" align=middle><!--{/def}-->
-<br>[<a href="{$self}?num={$oya/num}&mode=res&q={$oya/res/num}#F">引用</a>]</td>
-<td width=90%><br><font color={$oya/res/color}>{$oya/res/com}</font><br><br></td></tr>
+<% each(oya/res) %>
+<tr><th bgcolor=<% echo(oya/res/b_color)%> colspan=2><font color=#5B5B5B>[<% echo(oya/res/num) %>] <% echo(oya/res/subj)%></font></th></tr>
+<tr><td colspan=2>□ <% echo($oya/res/name)%><% def(oya/res/email)%> <a href="mailto:<% echo($oya/res/email)%>">＠</a><% /def %>-<small>(<% echo($oya/res/date)%><% def(oya/res/url)%>/<a href="<% echo(oya/res/url)%>" target=_top>URL</a><% /def %>)/Res<% echo(oya/res/cnt)%></small><br></td></tr>
+<tr><td width=10%><% def(oya/res/icon)%><img src="<% echo(oya/res/icon)%>" align=middle><% /def %>
+<br>[<a href="<% echo(self) %>?num=<% echo(oya/num)%>&mode=res&q=<% echo(oya/res/num)%>#F">引用</a>]</td>
+<td width=90%><br><font color=<% echo(oya/res/color)%>><% echo(oya/res/com)%></font><br><br></td></tr>
 <!--{/each}-->
+<% /each %>
 
 </table></td></tr></table>
-<!--{/def}-->
+<% /def %>
 
 <!--{def oya/over}-->
 <div align=right>
-<a href="{$self}?mode=res&num={$oya/num}&res=old">先頭から{$res_def}件</a> /
-<a href="{$self}?mode=res&num={$oya/num}&res=new">最新レス{$res_def}件</a> /
-<a href="{$self}?mode=res&num={$oya/num}&res=all">全レス表示</a></div>
+<a href="<% echo(self) %>?mode=res&num=<% echo(oya/num) %>&res=old">先頭から<% echo(res_def) %>件</a> /
+<a href="<% echo(self) %>?mode=res&num=<% echo(oya/num) %>&res=new">最新レス<% echo(res_def) %>件</a> /
+<a href="<% echo(self) %>?mode=res&num=<% echo(oya/num) %>&res=all">全レス表示</a></div>
 <!--{/def}-->
 
 </td></tr></table><br>
 <!--{/each}-->
+<% /each %>
 
 <hr width=90%><table width=65%><tr align=center><td>
 <!--{def prev}--><b>[<a href="{$prev}">前の{$page_def}件</a>]</b><!--{/def}-->&nbsp;
 <!--{def next}--><b>[<a href="{$next}">次の{$page_def}件</a>]</b><!--{/def}-->
 <br><br>Page / {$paging}
 </td>
-<form action="{$self}" method="GET">
+<form action="<% echo(self) %>" method="GET">
 <input type="hidden" name="mode" value="s">
 <td>
 全記事数/<b>{$total}</b> <small>(親/{$oyakiji} レス/{$reskiji})</small><br>
@@ -147,7 +150,7 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 <input type="submit" value=" 検 索 " onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';">
 </td></form></tr></table>
 
-<form action="{$self}" method="POST"><input type="hidden" name="no" value="0">
+<form action="<% echo(self) %>" method="POST"><input type="hidden" name="no" value="0">
 <table><tr><th bgcolor=#749FF1 colspan=3>編集/削除フォーム</th></tr><tr><td>
 <select name="mode">
 <option value="edit">編集
@@ -158,7 +161,7 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 </td></tr></table></form></center>
 <hr width=90%>
 <div align=right>
-<form action="{$self}" method="POST">
+<form action="<% echo(self) %>" method="POST">
 <input type="hidden" name="mode" value="admin">
 <input type="password" name="pass" size=6 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"><input type=submit value="管理用" onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';"><br>
 </form></div>

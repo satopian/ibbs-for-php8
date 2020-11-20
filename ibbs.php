@@ -33,51 +33,53 @@ if (phpversion()<"4.1.0") {
 　　・ibbs.dat,icount.dat,ilog.logの属性を666か646にする。
   　・過去ログ使用の場合は生成ﾃﾞｨﾚｸﾄﾘ（./ならpublic_html等)の属性777か757にする
 */
-require_once("htmltemplate.inc"); 
+// require_once("htmltemplate.inc"); 
+require_once(__DIR__.'/Skinny.php');
+
 
 // スクリプト名
-define(PHP_SELF, "ibbs.php");
+define('PHP_SELF', "ibbs.php");
 
 // ログファイル名(権限を606,646,666等にする)
-define(LOGFILE, "ibbs.dat");
+define('LOGFILE', "ibbs.dat");
 
 // 管理パス
-define(ADMINPASS, "1234");
+define('ADMINPASS', "1234");
 
 // 投稿通知メールを送るyes=1 no=0
-define(NOTICE, 0);
+define('NOTICE', 0);
 // 通知メール送信先
 $admin_mail = "all@s.to";
 
 // レスがついたら記事を上げる？yes=1 no=0
-define(AGE, 1);
+define('AGE', 1);
 
 // URLを自動リンクする？
-define(AUTOLINK, 1);
+define('AUTOLINK', 1);
 // 投稿後の飛び先
 $jump = "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
 
 // 投稿制限文字数。上から名前、タイトル、コメント。半角で
-define(MAXNAME, 32);
-define(MAXSUBJ, 32);
-define(MAXCOM, 1000);
+define('MAXNAME', 32);
+define('MAXSUBJ', 32);
+define('MAXCOM', 1000);
 // 最小文字数
-define(MINCOM, 4);
+define('MINCOM', 4);
 // 改行数制限
-define(MAXBR, 20);
+define('MAXBR', 20);
 
 // 親記事最大ログ保持件数
-define(MAXLOG, 40);
+define('MAXLOG', 40);
 
 // ヘッドライン表示件数(↑の数以下で）
-define(MAXHEADLINE, 30);
+define('MAXHEADLINE', 30);
 
 // 色指定がない時の色
-define(NOCOL, "#666666");
+define('NOCOL', "#666666");
 
 // アイコンの設定
 // アイコン用ディレクトリ
-define(I_DIR, "./Icon/");
+define('I_DIR', "./Icon/");
 // HTML表示用アイコン一覧 'ファイル名'=>'アイコン名'をペアで
 $html_icon = array('randam'=>'ランダム','cat1.gif'=>'しろねこ','dog1.gif'=>'いぬ',
                    'rob1.gif'=>'くるくるロボ','pen1.gif'=>'ぺんぎん','td1.gif'=>'くま',
@@ -107,78 +109,78 @@ $no_word[] = '<script';
 $no_word[] = 'http:';
 
 // 過去ログ機能を使う？Yes=1,No=0（使用する場合は保存ﾃﾞｨﾚｸﾄﾘを757,777等にする）
-define(PAST, 0);
-define(PASTLOG, "ilog.log"); // 過去ログカウントファイル
-define(PASTDIR, "./");       // 過去ログ生成ディレクトリ(/で終わる事)
-define(PASTSIZE, "100");     // 過去ログ記録数 KB
-define(PASTDEF, 20);         // 過去ログモードでの表示件数
+define('PAST', 0);
+define('PASTLOG', "ilog.log"); // 過去ログカウントファイル
+define('PASTDIR', "./");       // 過去ログ生成ディレクトリ(/で終わる事)
+define('PASTSIZE', "100");     // 過去ログ記録数 KB
+define('PASTDEF', 20);         // 過去ログモードでの表示件数
 
 // カウンタを使う？
-define(COUNTER, 1);
-define(COUNTIMG, "");    //カウンタ画像のディレクトリ（テキストの場合は空。/で終わる）
-define(COUNTLOG, "icount.dat"); //カウンタファイル(権限を606,646,666等にする)
+define('COUNTER', 1);
+define('COUNTIMG', "");    //カウンタ画像のディレクトリ（テキストの場合は空。/で終わる）
+define('COUNTLOG', "icount.dat"); //カウンタファイル(権限を606,646',666等にする)
 
 // 機種判別
 //$ua = explode("/", getenv('HTTP_USER_AGENT'));
 //ibbs.php?ua=DoCoMoとか
 if ($_GET['ua']) $ua[0] = $_GET['ua'];
-if(preg_match("/^KDDI/",$ua[0])){
-  //WAP2.0の場合
-  define(MAINFILE, "i_skin_main.html");
-  define(OTHERFILE, "i_skin_other.html");
-  define(PAGEDEF, 5);
-  define(RESDEF, 3);
-  define(RESEVERY, 5);
-  define(MOBILE, 1);
-}
-switch( $ua[0] ){
-case "PDXGW" :
-  //H"
-case "UP.Browser" :
-  //HDMLの場合
-case "J-PHONE" :
-  //J-PHONEの場合
-case "DoCoMo" :
-  // デザインファイル携帯
-  define(MAINFILE, "i_skin_main.html");
-  define(OTHERFILE, "i_skin_other.html");
-  define(PAGEDEF, 5);//親記事表示数
-  define(RESDEF, 3);//レス表示数
-  define(RESEVERY, 5);//レス？件ずつ
-  define(MOBILE, 1);//携帯モードは日付表示省略
-  break;
-case 'line'://一行レス
+// if(preg_match("/^KDDI/",$ua[0])){
+//   //WAP2.0の場合
+//   define('MAINFILE', "i_skin_main.html");
+//   define('OTHERFILE', "i_skin_other.html");
+//   define('PAGEDEF', 5);
+//   define('RESDEF', 3);
+//   define('RESEVERY', 5);
+//   define('MOBILE', 1);
+// }
+// switch( $ua[0] ){
+// case "PDXGW" :
+//   //H"
+// case "UP.Browser" :
+//   //HDMLの場合
+// case "J-PHONE" :
+//   //J-PHONEの場合
+// case "DoCoMo" :
+//   // デザインファイル携帯
+//   define('MAINFILE', "i_skin_main.html");
+//   define('OTHERFILE', "i_skin_other.html");
+//   define('PAGEDEF', 5);//親記事表示数
+//   define('RESDEF', 3);//レス表示数
+//   define('RESEVERY', 5);//レス？件ずつ
+//   define('MOBILE', 1);//携帯モードは日付表示省略
+//   break;
+// case 'line'://一行レス
   // デザインファイルPC
-  define(MAINFILE, "skin_main_line.html");
-  define(OTHERFILE, "skin_other.html");
+//   define('MAINFILE', "skin_main_line.html");
+//   define('OTHERFILE', "skin_other.html");
   // 1ページに表示する親記事数
-  define(PAGEDEF, 5);
+//   define('PAGEDEF', 5);
   // 1親記事に表示するレス数
-  define(RESDEF, 5);
+//   define('RESDEF', 5);
   // 先頭？件、最新？件表示
-  define(RESEVERY, 10);
-  break;
-default :
+//   define('RESEVERY', 10);
+//   break;
+// default :
   // デザインファイルPC
-  define(MAINFILE, "skin_main.html");
-  define(OTHERFILE, "skin_other.html");
+  define('MAINFILE', 'skin_main.html');
+  define('OTHERFILE', 'skin_other.html');
   // 1ページに表示する親記事数
-  define(PAGEDEF, 5);
+  define('PAGEDEF', 5);
   // 1親記事に表示するレス数
-  define(RESDEF, 5);
+  define('RESDEF', 5);
   // 先頭？件、最新？件表示
-  define(RESEVERY, 10);
+  define('RESEVERY', 10);
   // 携帯時は日付を省略
-  define(MOBILE, 0);
-  break;
-}
+  define('MOBILE', 0);
+//   break;
+// }
 //---設定ここまで
 
 // 禁止ホスト
 if (is_array($no_host)) {
   $host = gethostbyaddr($_SERVER["REMOTE_ADDR"]);
   foreach ($no_host as $user) {
-    if(eregi($user, $host)){
+    if(preg_match("/$user/i", $host)){
       header("Status: 204\n\n");//空白ページ
       exit;
     }
@@ -373,14 +375,14 @@ function all_view($page,$mode="") {
     $arg['admin'] = true;
     $arg['title'] = "管理モード";
     $arg['self'] = PHP_SELF;
-    HtmlTemplate::t_include(OTHERFILE,$arg);
+    htmloutput(OTHERFILE,$arg);
   }
   else {
     $arg['font'] = radio_list("font");
     $arg['hr']   = radio_list("hr");
     $arg['icon'] = option_list();
-    $arg['self'] = PHP_SELF;
-    HtmlTemplate::t_include(MAINFILE,$arg);
+	$arg['self'] = PHP_SELF;
+    htmloutput(MAINFILE,$arg);
   }
 }
 
@@ -420,7 +422,7 @@ function res_view($num) {
   // レス展開
   for ($i = $st; $i < $to; $i++) {
     if ($res[$i] == "") continue;
-    list($rnum,$rdate,$rname,$remail,$rsubj,$rcom,$rurl,$rcol,$ricon,,,$rhost) = explode("<>", $res[$i]);
+	list($rnum,$rdate,$rname,$remail,$rsubj,$rcom,$rurl,$rcol,$ricon,,,$rhost) = explode("<>", $res[$i]);
     list($rcolor,$rb_color) = explode(";", $rcol);
     if ($rcolor == "") $rcolor = NOCOL;
     if ($rb_color == "") $rb_color = NOCOL;
@@ -471,7 +473,7 @@ function res_view($num) {
   $arg['cpass'] = $_COOKIE['ibbs']['pass'];
   $arg['curl'] = $_COOKIE['ibbs']['url'];
 
-  HtmlTemplate::t_include(OTHERFILE,$arg);
+  htmloutput(OTHERFILE,$arg);
 }
 /*-- 書込み前処理 --*/
 function check() {
@@ -479,21 +481,21 @@ function check() {
   //No<>Y/m/d(D) h:i:s<>name<>email<>subj<>com<>url<>#ffffff;#back<>icon.gif<>oyaNo<>crypt<>ip<><>
 
   if (trim($_POST['name'])=="")   error("名前が入力されてません");
-  if (ereg("^( |　|\t|\r|\n)*$",$_POST['comment'])) error("コメントが入力されてません");
+  if (preg_match("/^( |　|\t|\r|\n)*$/",$_POST['comment'])) error("コメントが入力されてません");
   if (strlen($_POST['pass']) > 8) error("削除キーは8文字以上でお願いします");
   if (strlen($_POST['name']) > MAXNAME) error("名前は長すぎますっ！");
   if (strlen($_POST['subject']) > MAXSUBJ)  error("タイトルが長すぎますっ！");
   if (strlen($_POST['comment']) > MAXCOM)  error("本文が長すぎますっ！");
   if (strlen($_POST['comment']) < MINCOM)  error("本文が短すぎますっ！");
-  if ($_POST['email'] && !ereg("(.*)@(.*)\.(.*)", $_POST['email']))
+  if ($_POST['email'] && !preg_match("/(.*)@(.*)\.(.*)/", $_POST['email']))
     error("E-メールの入力内容が不正です!");
 
   // 禁止ワード
   if (is_array($no_word)) {
     foreach ($no_word as $fuck) {
-      if (ereg($fuck, $_POST['comment'])) error("使用できない文字が含まれています！");
-      if (ereg($fuck, $_POST['subject'])) error("使用できない文字が含まれています！");
-      if (ereg($fuck, $_POST['name'])) error("使用できない文字が含まれています！");
+      if (preg_match("/$fuck/", $_POST['comment'])) error("使用できない文字が含まれています！");
+      if (preg_match("/$fuck/", $_POST['subject'])) error("使用できない文字が含まれています！");
+      if (preg_match("/$fuck/", $_POST['name'])) error("使用できない文字が含まれています！");
     }
   }
   if (preg_match("/(<a\b[^>]*?>|\[url(?:\s?=|\]))|href=/i", $_POST['comment'])) error("エラー！！");
@@ -522,8 +524,8 @@ function check() {
   }
   // 全$_POSTに適用
   $post = array_map("htmlspecialchars",$_POST);
-  if (get_magic_quotes_gpc())
-    $post = array_map("stripslashes", $post);
+//   if (get_magic_quotes_gpc())
+//     $post = array_map("stripslashes", $post);
   // 無題
   if (trim($post['subject'])=="") $post['subject'] = "(無題)";
   // 改行処理
@@ -531,12 +533,12 @@ function check() {
   $comment = str_replace("\r", "\n", $comment);//改行文字統一
   $comment = preg_replace("/\n{2,}/", "\n\n", $comment);//2行以上の改行を2行に
   if (substr_count($comment, "\n") > MAXBR) error("改行が多すぎます!");
-  $comment = eregi_replace("&amp;([0-9a-z#]+);", "&\\1;", $comment);
+  $comment = preg_replace("/&amp;([0-9a-z#]+);/i", "&\\1;", $comment);
   $post['comment'] = str_replace("\n", "<br>", $comment);//\nをbrに
 
   // 時間、IP、削除キー、色
   $post['now'] = gmdate("Y/m/d(D) H:i:s",time()+9*60*60);
-  $post['url'] = eregi_replace("^http://", "", $post['url']);
+  $post['url'] = preg_replace("#^http://#i", "", $post['url']);
   $post['url'] = str_replace(" ", "", $post['url']);
   $post['ico'] = $ico;
   $post['ip'] = gethostbyaddr(getenv("REMOTE_ADDR"));
@@ -585,7 +587,7 @@ EOL;
 
     $mail_body  = str_replace("<br>",   "\n", $mail_body);
     $mail_sub = "投稿通知 ".$_SERVER['REQUEST_URI'];
-    if (ereg("^[0-9A-Za-z._-]+@[0-9A-Za-z.-]+$", $post['email'])) {
+    if (preg_match("/^[0-9A-Za-z._-]+@[0-9A-Za-z.-]+$/", $post['email'])) {
     $from = " <".$post['email'].">";
     } else {
       $from = " <nomail@xxxx.xxx>";
@@ -593,7 +595,7 @@ EOL;
     $head = "From: ".$from;
     //送信
     mb_language('japanese');
-    mb_internal_encoding('SJIS');
+    mb_internal_encoding('utf-8');
     @mb_send_mail($admin_mail, $mail_sub, $mail_body, $head);
   }
 	
@@ -709,7 +711,7 @@ function edit() {
   $arg['icon'] = option_list($icon);
   $arg['title'] = "記事No.$num の編集";
   $arg['self'] = PHP_SELF;
-  HtmlTemplate::t_include(OTHERFILE,$arg);
+  htmloutput(OTHERFILE,$arg);
 }
 /*-- 編集書き直し --*/
 function rewrite($post, $target) {
@@ -763,7 +765,7 @@ function search() {
       if($find) array_push($result, $line);	//マッチしたログを配列に
     }
     $arg['total'] = count($result);
-    if (get_magic_quotes_gpc()) $word = stripslashes($word);
+    // if (get_magic_quotes_gpc()) $word = stripslashes($word);
     $arg['word'] = $word;
 
     if (count($result) > 0) {
@@ -811,7 +813,7 @@ function search() {
   $arg['search_mode'] = true;
   $arg['title'] = "ログ内検索";
   $arg['self'] = PHP_SELF;
-  HtmlTemplate::t_include(OTHERFILE,$arg);
+  htmloutput(OTHERFILE,$arg);
 }
 /*-- 過去ログ表示 --*/
 function past_view($logs, $page) {
@@ -863,7 +865,7 @@ function past_view($logs, $page) {
   $arg['past_mode'] = true;
   $arg['title'] = "過去ログ表示";
   $arg['self'] = PHP_SELF;
-  HtmlTemplate::t_include(OTHERFILE,$arg);
+  htmloutput(OTHERFILE,$arg);
 }
 /*-- 過去ログ書込み --*/
 function past_write($lines) {
@@ -881,7 +883,7 @@ function past_write($lines) {
       flock($fp, LOCK_EX);
       fputs($fp, $cnt);
       fclose($fp);
-      $pfile = PAST_DIR . $cnt . ".txt";
+      $pfile = PASTDIR . $cnt . ".txt";
     }
   }
   // 過去ログに書込み
@@ -899,10 +901,15 @@ function update($lines) {
   fputs($fp, implode('', $lines));
   fclose($fp);
 }
+
+
 /*-- 自動リンク --*/
 function autolink($str) {
-    return ereg_replace("(https?|ftp)(://[[:alnum:]\+\$\;\?\.%,!#~*/:@&=_-]+)","<a href=\"\\1\\2\" target=_top>\\1\\2</a>",$str);
+	return preg_replace("{(https?|ftp)(://[[:alnum:]\+\$\;\?\.%,!#~*/:@&=_-]+)}","<a href=\"\\1\\2\" target=_top>\\1\\2</a>/",$str);
+	// return preg_replace("{(https?|ftp)(://[[:alnum:]\+\$\;\?\.%,!#~*/:@&=_-]+)}","<a href=\"\\1\\2\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">\\1\\2</a>",$proto);
+
 }
+
 /*-- 暗号化関数 --*/
 function my_crypt($str) {
   $time = time();
@@ -917,7 +924,7 @@ function error($str) {
   $arg['err_mode'] = true;
   $arg['title'] = "エラー！！";
   $arg['self'] = PHP_SELF;
-  HtmlTemplate::t_include(OTHERFILE,$arg);
+  htmloutput(OTHERFILE,$arg);
   exit;
 }
 /*-- デバグ --*/
@@ -926,6 +933,12 @@ function _dbg($str) {
   var_export($str);
   echo "</pre>";
 }
+/* HTML出力 */
+function htmloutput($template,$dat){
+	global $Skinny;
+	$Skinny->SkinnyDisplay( $template, $dat );
+}
+
 // スタート！
 $page = intval($_GET['page']);
 $mode = ($_GET['mode']) ? $_GET['mode'] : $_POST['mode'];
@@ -983,7 +996,7 @@ switch ($mode) {
     $arg['img_mode'] = true;
     $arg['title'] = "アイコン画像一覧";
     $arg['self'] = PHP_SELF;
-    HtmlTemplate::t_include(OTHERFILE,$arg);
+    htmloutput(OTHERFILE,$arg);
     break;
   // ヘルプ表示
   case 'man':
@@ -991,7 +1004,7 @@ switch ($mode) {
     $arg['title'] = "掲示板の使い方";
     $arg['maxlog'] = MAXLOG;
     $arg['self'] = PHP_SELF;
-    HtmlTemplate::t_include(OTHERFILE,$arg);
+    htmloutput(OTHERFILE,$arg);
     break;
   // 新規投稿別画面
   case 'post':
@@ -1002,7 +1015,7 @@ switch ($mode) {
     $arg['icon'] = option_list();
     $arg['maxcom'] = MAXCOM;
     $arg['self'] = PHP_SELF;
-    HtmlTemplate::t_include(OTHERFILE,$arg);
+    htmloutput(OTHERFILE,$arg);
     break;
   // 通常表示
   default:
