@@ -1,7 +1,10 @@
-<html><head>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- <% echo(self) %> -->
 <STYLE TYPE="text/css">
-<!--
 A:link{    /* 未リンク */
 	text-decoration:none;
 }
@@ -24,7 +27,6 @@ border          :1 solid #749FF1; /*線の太さ、色*/
 input{
 font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 }
--->
 </STYLE>
 
 <META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=Shift_JIS">
@@ -36,9 +38,9 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 <center>
 <font color=#749FF1 face="Times New Roman" size=6>PHP-I-BOARD</font>
 <br><br><table border=0><tr><td bgcolor=#FFFFFF>
-<font color=#8187FC>{$count}</font></td></tr></table>
+<font color=#8187FC><% echo(count)%></font></td></tr></table>
 <hr width=90%>
-□<a href="http://php.s3.to"> HOME</a>　
+□<a href="https://pbbs.sakura.ne.jp/"> HOME</a>　
 □<a href="<% echo(self) %>?mode=man"> HELP</a>　
 □<a href="<% echo(self) %>?mode=s"> SEARCH</a>　
 <!--{def kako}-->□ <a href="<% echo(self) %>?mode=log">過去ログ</a><!--{/def}-->
@@ -65,11 +67,11 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 <td bgcolor=#749FF1>削除キー</td>
 <td>/<input type=password name=delkey value="<% echo(cpass)%>" size=8 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';">
 <small>(半角8文字以内)</small></td></tr>
-<tr><td colspan=4 bgcolor=#749FF1>Comment/ <small>(適当に改行を入れて下さい/半角{$maxcom}文字以内)</small><br>
+<tr><td colspan=4 bgcolor=#749FF1>Comment/ <small>(適当に改行を入れて下さい/半角<% echo(maxcom)%>文字以内)</small><br>
 　<textarea name=comment rows=8 cols=70 wrap=soft onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></textarea></td></tr>
 
 <tr><td bgcolor=#749FF1>URL</td>
-<td colspan=3>/<input type=text name="url" value="http://<% echo(curl)%>" size=65 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
+<td colspan=3>/<input type=text name="url" value="<% echo(curl)%>" size=65 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
 <tr><td bgcolor=#749FF1>文字色</td><td colspan=3>/
 <% each(font)%>
 <input type=radio name=font value="<% echo(font/color) %>"<% echo(font/chk)%>><font color="<% echo(font/color) %>">■</font>
@@ -87,9 +89,9 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 <input type=reset value="リセット" onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></td></tr></table></form>
 <a name=list></a><table width=80% border=1 cellpadding=5 cellspaciing=1 bordercolor=#749FF1><tr>
 <td bgcolor=#FFFFFF>
-<!--{each headline}-->
+<% each(headline)%>
 <a href="<% echo(headline/url)%>"><% echo(headline/subj)%>(<% echo(headline/cnt)%>)</a> /
-<!--{/each}-->
+<% /each %>
 </td></tr></table><br>
 
 <!--{each oya}-->
@@ -105,7 +107,7 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 
 <div align=right>
 <form action=<% echo(self) %> method=GET>
-<input type=hidden name=num value=<% echo($oya/num)%>
+<input type=hidden name=num value=<% echo(oya/num)%>>
 <input type=hidden name=mode value=res>
 <input type=submit value=" レスする " onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></form></div>
 <% def(oya/res) %>
@@ -118,32 +120,30 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 <tr><td width=10%><% def(oya/res/icon)%><img src="<% echo(oya/res/icon)%>" align=middle><% /def %>
 <br>[<a href="<% echo(self) %>?num=<% echo(oya/num)%>&mode=res&q=<% echo(oya/res/num)%>#F">引用</a>]</td>
 <td width=90%><br><font color=<% echo(oya/res/color)%>><% echo(oya/res/com)%></font><br><br></td></tr>
-<!--{/each}-->
 <% /each %>
 
 </table></td></tr></table>
 <% /def %>
 
-<!--{def oya/over}-->
+<% def(oya/over)%>
 <div align=right>
 <a href="<% echo(self) %>?mode=res&num=<% echo(oya/num) %>&res=old">先頭から<% echo(res_def) %>件</a> /
 <a href="<% echo(self) %>?mode=res&num=<% echo(oya/num) %>&res=new">最新レス<% echo(res_def) %>件</a> /
 <a href="<% echo(self) %>?mode=res&num=<% echo(oya/num) %>&res=all">全レス表示</a></div>
-<!--{/def}-->
+<% /def %>
 
 </td></tr></table><br>
-<!--{/each}-->
 <% /each %>
 
 <hr width=90%><table width=65%><tr align=center><td>
-<!--{def prev}--><b>[<a href="{$prev}">前の{$page_def}件</a>]</b><!--{/def}-->&nbsp;
-<!--{def next}--><b>[<a href="{$next}">次の{$page_def}件</a>]</b><!--{/def}-->
-<br><br>Page / {$paging}
+<% def(prev)%><b>[<a href="<% echo(prev)%>">前の<% echo(page_def)%>件</a>]</b><% /def %>&nbsp;
+<% def(next)%><b>[<a href="<% echo(next)%>">次の<% echo(page_def)%>件</a>]</b><% /def %>
+<br><br>Page / <% echo(paging)%>
 </td>
 <form action="<% echo(self) %>" method="GET">
 <input type="hidden" name="mode" value="s">
 <td>
-全記事数/<b>{$total}</b> <small>(親/{$oyakiji} レス/{$reskiji})</small><br>
+全記事数/<b><% echo(total)%></b> <small>(親/<% echo(oyakiji)%> レス/<% echo(reskiji)%>)</small><br>
 <input type="hidden" name="andor" value="and">
 <input type="hidden" name="logs" value="0">
 キーワード/ <input type=text name=w size=10 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';">

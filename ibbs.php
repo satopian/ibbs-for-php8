@@ -257,9 +257,10 @@ function all_view($page,$mode="") {
   list(,,,,$up) = explode("<>", $lines[0]);
   $arg['update'] = gmdate("Y/m/d(D) H:i:s",time()+9*60*60);
   // ヘッドライン
+  $res=[];$o_num=0;
   for ($h = 1; $h < count($lines); $h++) {
     list($num,,,,$subj,,,,,$type,)  = explode("<>", $lines[$h]);
-    // レスの場合
+	// レスの場合
     if ($type) {
       if (!is_array($res[$type])) $res[$type] = array();
       array_unshift($res[$type], $lines[$h]);
@@ -291,7 +292,7 @@ function all_view($page,$mode="") {
     list($color,$b_color) = explode(";", $col);
     if ($color == "") $color = NOCOL;
     if ($b_color == "") $b_color = NOCOL;
-    if ($url) $url = "http://".$url;
+    // if ($url) $url = "http://".$url;
     if ($icon) $icon = I_DIR.$icon;
     if ($mode!="admin" && AUTOLINK) $com = autolink($com);
     if (MOBILE) $date = substr($date, 5, 5) . substr($date, 15, 6);
@@ -325,7 +326,7 @@ function all_view($page,$mode="") {
       list($rcolor,$rb_color) = explode(";", $rcol);
       if ($rcolor == "") $rcolor = NOCOL;
       if ($rb_color == "") $rb_color = NOCOL;
-      if ($rurl) $rurl = "http://".$rurl;
+    //   if ($rurl) $rurl = "http://".$rurl;
       if ($ricon) $ricon = I_DIR.$ricon;
       if ($mode!="admin" && AUTOLINK) $rcom = autolink($rcom);
       if ($mode == "admin") {
@@ -426,7 +427,7 @@ function res_view($num) {
     list($rcolor,$rb_color) = explode(";", $rcol);
     if ($rcolor == "") $rcolor = NOCOL;
     if ($rb_color == "") $rb_color = NOCOL;
-    if ($rurl) $rurl = "http://".$rurl;
+    // if ($rurl) $rurl = "http://".$rurl;
     // 引用
     if (isset($_GET['q']) && $_GET['q'] == $rnum) {
       $q_com = "&gt;$rcom";
@@ -445,7 +446,7 @@ function res_view($num) {
   list($color,$b_color) = explode(";", $col);
   if ($color == "") $color = NOCOL;
   if ($b_color == "") $b_color = NOCOL;
-  if ($url) $url = "http://".$url;
+//   if ($url) $url = "http://".$url;
   // 引用
   if (isset($_GET['q']) && $_GET['q'] == $num) {
     $q_com = "&gt;$com";
@@ -538,7 +539,7 @@ function check() {
 
   // 時間、IP、削除キー、色
   $post['now'] = gmdate("Y/m/d(D) H:i:s",time()+9*60*60);
-  $post['url'] = preg_replace("#^http://#i", "", $post['url']);
+//   $post['url'] = preg_replace("#^http://#i", "", $post['url']);
   $post['url'] = str_replace(" ", "", $post['url']);
   $post['ico'] = $ico;
   $post['ip'] = gethostbyaddr(getenv("REMOTE_ADDR"));
@@ -905,7 +906,7 @@ function update($lines) {
 
 /*-- 自動リンク --*/
 function autolink($str) {
-	return preg_replace("{(https?|ftp)(://[[:alnum:]\+\$\;\?\.%,!#~*/:@&=_-]+)}","<a href=\"\\1\\2\" target=_top>\\1\\2</a>/",$str);
+	return preg_replace("{(https?|ftp)(://[[:alnum:]\+\$\;\?\.%,!#~*/:@&=_-]+)}","<a href=\"\\1\\2\" target=_top>\\1\\2</a>",$str);
 	// return preg_replace("{(https?|ftp)(://[[:alnum:]\+\$\;\?\.%,!#~*/:@&=_-]+)}","<a href=\"\\1\\2\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">\\1\\2</a>",$proto);
 
 }
