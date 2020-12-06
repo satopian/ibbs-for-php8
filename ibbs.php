@@ -123,7 +123,7 @@ define('COUNTLOG', "icount.dat"); //カウンタファイル(権限を606,646',6
 // 機種判別
 //$ua = explode("/", getenv('HTTP_USER_AGENT'));
 //ibbs.php?ua=DoCoMoとか
-if ($_GET['ua']) $ua[0] = $_GET['ua'];
+// if ($_GET['ua']) $ua[0] = $_GET['ua'];
 // if(preg_match("/^KDDI/",$ua[0])){
 //   //WAP2.0の場合
 //   define('MAINFILE', "i_skin_main.html");
@@ -258,91 +258,107 @@ function all_view($page,$mode="") {
   $arg['update'] = gmdate("Y/m/d(D) H:i:s",time()+9*60*60);
   // ヘッドライン
   $res=[];$o_num=0;
-  for ($h = 1; $h < count($lines); $h++) {
-    list($num,,,,$subj,,,,,$type,)  = explode("<>", $lines[$h]);
-	// レスの場合
-    if ($type) {
-      if (!is_array($res[$type])) $res[$type] = array();
-      array_unshift($res[$type], $lines[$h]);
-    }
-    // 親記事の場合。親配列作成
-    else {
-      $oya[] = $lines[$h];
-      $res_num = count($res[$num]);
-      $o_num++;
-      $ptop = PAGEDEF * $p;
-
-      if ($ptop < $o_num) {
-        $url = "?page=$ptop";
-        $p++;
-      }
-      if ($mode != "admin") {
-        $arg['headline'][] = array('url'=>"{$_SERVER['PHP_SELF']}$url#$num", 'subj'=>$subj, 'cnt'=>$res_num);
-      }
-    }
-  }
+//   for ($h = 1; $h < count($lines); $h++) {
+	foreach ($lines as $h =>$val) {
+		if($h===0){
+			continue;
+		}
+		list($num,,,,$subj,,,,,$type,)  = explode("<>", $lines[$h]);
+		// レスの場合
+		if ($type) {//レスの親の記事ナンバー
+			$res[$type] = isset($res[$type]) ? $res[$type] : array();
+			array_unshift($res[$type], $lines[$h]) ;
+		
+		}
+	
+		// 親記事の場合。親配列作成
+		else {
+			$oya[] = $lines[$h];
+			$res_num = isset($res[$num]) ? count($res[$num]):0;//レス先の親のnoと一致するレスの数を数える
+			$o_num++;
+			$ptop = PAGEDEF * $p;
+			$url='';
+			if ($ptop < $o_num) {
+				$url = "?page=$ptop";
+				$p++;
+			}
+			if ($mode != "admin") {
+				$arg['headline'][] = array('url'=>"{$_SERVER['PHP_SELF']}$url#$num", 'subj'=>$subj, 'cnt'=>$res_num);
+			}
+		}
+	}
   if (count($arg['headline']) > MAXHEADLINE) {
     array_splice($arg['headline'], 0, $page);
     array_splice($arg['headline'], MAXHEADLINE);
   }
   // 親記事展開
-  for ($i = $page; $i < $page+PAGEDEF; $i++) {
-    if (!trim($oya[$i])) continue;
-    list($num,$date,$name,$email,$subj,$com,$url,$col,$icon,$type,,$host) = explode("<>", $oya[$i]);
-    list($color,$b_color) = explode(";", $col);
-    if ($color == "") $color = NOCOL;
-    if ($b_color == "") $b_color = NOCOL;
-    // if ($url) $url = "http://".$url;
-    if ($icon) $icon = I_DIR.$icon;
-    if ($mode!="admin" && AUTOLINK) $com = autolink($com);
-    if (MOBILE) $date = substr($date, 5, 5) . substr($date, 15, 6);
-    // 管理モード時本文省略
-    if ($mode == "admin") {
-      $com = str_replace("<br>", " ", $com);
-      $com = substr($com, 0, 60) . "..";
-    }
-    $cnt = $i+1;
-    $res_cnt = count($res[$num]);
-    // 親記事格納
-    $arg['oya'][$o] = compact('cnt','res_cnt','num','date','name','email','subj','com','b_color','color','icon','url','host','page');
-    // レス数オーバー？
-    $rst = $res_cnt-RESDEF;
-    if ($rst <= 0) {
-      $rst = 0;
-      $arg['oya'][$o]['over'] = false;
-    }
-    else {
-      $arg['oya'][$o]['over'] = true;
-    }
-    // 管理モード時は全レス表示
-    if ($mode == "admin") {
-      $rst = 0;
-      $arg['pass'] = $pass;
-      $arg['size'] = filesize(LOGFILE);
-    }
-    // レス展開
-    for ($j=$rst; $j<count($res[$num]); $j++) {
-      list($rnum,$rdate,$rname,$remail,$rsubj,$rcom,$rurl,$rcol,$ricon,,,$host) = explode("<>", $res[$num][$j]);
-      list($rcolor,$rb_color) = explode(";", $rcol);
-      if ($rcolor == "") $rcolor = NOCOL;
-      if ($rb_color == "") $rb_color = NOCOL;
-    //   if ($rurl) $rurl = "http://".$rurl;
-      if ($ricon) $ricon = I_DIR.$ricon;
-      if ($mode!="admin" && AUTOLINK) $rcom = autolink($rcom);
-      if ($mode == "admin") {
-        $rcom = str_replace("<br>", " ", $rcom);
-        $rcom = substr($rcom, 0, 60) . "..";
-      }
-      // レス記事格納
-      $rres[$o][] = array('cnt'=>$j+1,'num'=>$rnum,'date'=>$rdate,'name'=>$rname,'email'=>$remail,'subj'=>$rsubj,
-                          'com'=>$rcom,'b_color'=>$rb_color,'color'=>$rcolor,'icon'=>$ricon,'url'=>$rurl,'host'=>$host
-                          );
-    }
-    // 親記事格納
-    $arg['oya'][$o]['res'] = $rres[$o];
-    $o++;
-  }
+  	for ($i = $page; $i < $page+PAGEDEF; $i++) {
+		if (!isset($oya[$i])) continue;
+		// if (!trim($oya[$i])) continue;
+		list($num,$date,$name,$email,$subj,$com,$url,$col,$icon,$type,,$host) = explode("<>", $oya[$i]);
+		list($color,$b_color) = explode(";", $col);
+		if ($color == "") $color = NOCOL;
+		if ($b_color == "") $b_color = NOCOL;
+		// if ($url) $url = "http://".$url;
+		if ($icon) $icon = I_DIR.$icon;
+		if ($mode!="admin" && AUTOLINK) $com = autolink($com);
+		if (MOBILE) $date = substr($date, 5, 5) . substr($date, 15, 6);
+		// 管理モード時本文省略
+		if ($mode == "admin") {
+		$com = str_replace("<br>", " ", $com);
+		$com = substr($com, 0, 60) . "..";
+		}
+		$cnt = $i+1;
+		$res_cnt = isset($res[$num]) ? count($res[$num]):0;
+		// 親記事格納
+		$arg['oya'][$o] = compact('cnt','res_cnt','num','date','name','email','subj','com','b_color','color','icon','url','host','page');
+		// レス数オーバー？
+		$rst = $res_cnt-RESDEF;
+		if ($rst <= 0) {
+		$rst = 0;
+		$arg['oya'][$o]['over'] = false;
+		}
+		else {
+		$arg['oya'][$o]['over'] = true;
+		}
+		// 管理モード時は全レス表示
+		if ($mode == "admin") {
+		$rst = 0;
+		$arg['pass'] = $pass;
+		$arg['size'] = filesize(LOGFILE);
+		}
+		// レス展開
+		$rres=[];
+		for ($j=$rst; $j<$res_cnt; $j++) {
+			if(!isset($res[$num][$j])){
+				continue;
+			}
+			
+		list($rnum,$rdate,$rname,$remail,$rsubj,$rcom,$rurl,$rcol,$ricon,,,$host) = explode("<>", $res[$num][$j]);
+		list($rcolor,$rb_color) = explode(";", $rcol);
+		if ($rcolor == "") $rcolor = NOCOL;
+		if ($rb_color == "") $rb_color = NOCOL;
+		//   if ($rurl) $rurl = "http://".$rurl;
+		if ($ricon) $ricon = I_DIR.$ricon;
+		if ($mode!="admin" && AUTOLINK) $rcom = autolink($rcom);
+		if ($mode == "admin") {
+			$rcom = str_replace("<br>", " ", $rcom);
+			$rcom = substr($rcom, 0, 60) . "..";
+		}
+		// レス記事格納
+		$rres[$o][] = array('cnt'=>$j+1,'num'=>$rnum,'date'=>$rdate,'name'=>$rname,'email'=>$remail,'subj'=>$rsubj,
+							'com'=>$rcom,'b_color'=>$rb_color,'color'=>$rcolor,'icon'=>$ricon,'url'=>$rurl,'host'=>$host
+							);
 
+		}
+		// 親記事格納
+		if($rres){
+			$arg['oya'][$o]['res'] = $rres[$o];
+		}
+		
+		$o++;
+	}
+	$qry='';
   if ($mode == "admin") $qry = "&mode=admin&pass=".$arg['pass'];
   // ページ前/次
   $prev = $page - PAGEDEF;
@@ -351,6 +367,7 @@ function all_view($page,$mode="") {
   if ($next < count($oya)) $arg['next'] = "{$_SERVER['PHP_SELF']}?page=$next$qry";
   // ページ直接移動
   $tpage = (int)count($oya) / PAGEDEF;
+  $pp=0;
   for ($a = 0; $a < $tpage; $a++) {
     if ($a == $page/PAGEDEF) $arg['paging'].= "[<b>$a</b>] ";
     else $arg['paging'].= "[<a href=\"{$_SERVER['PHP_SELF']}?page=$pp$qry\"><b>$a</b></a>] ";
@@ -422,7 +439,10 @@ function res_view($num) {
 
   // レス展開
   for ($i = $st; $i < $to; $i++) {
-    if ($res[$i] == "") continue;
+    if (!isset($res[$i])){
+		continue;
+	} 
+		
 	list($rnum,$rdate,$rname,$remail,$rsubj,$rcom,$rurl,$rcol,$ricon,,,$rhost) = explode("<>", $res[$i]);
     list($rcolor,$rb_color) = explode(";", $rcol);
     if ($rcolor == "") $rcolor = NOCOL;
@@ -608,7 +628,8 @@ EOL;
     array_unshift($lines, $newline);
     // 過去ログ
     $kako = array();
-    $over = false;
+	$over = false;
+	$oya=0;
     for ($i = 0; $i < count($lines); $i++) {
       list($num,,,,,,,,,$type,)  = explode("<>", $lines[$i]);
       if ($over) {
@@ -844,7 +865,8 @@ function past_view($logs, $page) {
     if ($prev >= 0)          $arg['prev'] = "{$_SERVER['PHP_SELF']}?mode=log&logs=$logs&page=$prev";
     if ($next < count($lines)) $arg['next'] = "{$_SERVER['PHP_SELF']}?mode=log&logs=$logs&page=$next";
     // ページ直接移動
-    $tpage = (int)count($lines) / PASTDEF;
+	$tpage = (int)count($lines) / PASTDEF;
+	$pp=0;
     for ($a = 0; $a < $tpage; $a++) {
       if ($a == $page/PASTDEF) $arg['paging'].= "[<b>$a</b>] ";
       else $arg['paging'].= "[<a href=\"{$_SERVER['PHP_SELF']}?mode=log&logs=$logs&page=$pp\"><b>$a</b></a>] ";
@@ -941,8 +963,8 @@ function htmloutput($template,$dat){
 }
 
 // スタート！
-$page = intval($_GET['page']);
-$mode = ($_GET['mode']) ? $_GET['mode'] : $_POST['mode'];
+$page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
+$mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : '';
 
 switch ($mode) {
   // 書込み
