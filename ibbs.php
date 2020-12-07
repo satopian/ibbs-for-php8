@@ -221,8 +221,12 @@ function radio_list($name, $select="") {
   // ｸｯｷｰが無い場合は0番目にセット
   if (!isset($_COOKIE['ibbs'][$name])) $select = ${$name}[0];
   foreach ($$name as $l=>$col) {
-    if ($_COOKIE['ibbs'][$name] == $col || $select == $col) $arg[$l]['chk'] = " checked";
-    $arg[$l]['color'] = $col;
+    if ($_COOKIE['ibbs'][$name] == $col || $select == $col){
+		$arg[$l]['chk'] = " checked";
+	} else{
+		$arg[$l]['chk'] = "";
+	}
+	$arg[$l]['color'] = $col;
   }
   return $arg;
 }
@@ -232,7 +236,11 @@ function option_list($select="") {
   $l = 0;
   if (in_array($_COOKIE['ibbs']['ico'], $mas_i)) $select = "master";
   foreach ($html_icon as $file=>$name) {
-    if ($_COOKIE['ibbs']['ico'] == $file || $select == $file) $arg[$l]['sel'] = " selected";
+    if ($_COOKIE['ibbs']['ico'] == $file || $select == $file){
+		$arg[$l]['sel'] = " selected";
+	} else{
+		$arg[$l]['sel'] = "";
+	}
     $arg[$l]['file'] = $file;
     $arg[$l]['name'] = $name;
     $l++;
@@ -251,7 +259,7 @@ function all_view($page,$mode="") {
   $lines = file(LOGFILE);
   // 最初はページ0
   if (!$page) $page = 0;
-  $p = 1;
+  $p = 0;
   $o = 0;
   // 最終更新日
   list(,,,,$up) = explode("<>", $lines[0]);
@@ -269,19 +277,17 @@ function all_view($page,$mode="") {
 			$res[$type] = isset($res[$type]) ? $res[$type] : array();
 			array_unshift($res[$type], $lines[$h]) ;
 		
-		}
-	
-		// 親記事の場合。親配列作成
-		else {
+		}else {// 親記事の場合。親配列作成
 			$oya[] = $lines[$h];
 			$res_num = isset($res[$num]) ? count($res[$num]):0;//レス先の親のnoと一致するレスの数を数える
 			$o_num++;
 			$ptop = PAGEDEF * $p;
 			$url='';
-			if ($ptop < $o_num) {
-				$url = "?page=$ptop";
-				$p++;
+			if ($ptop > $o_num) {
+				
+				$url = "?page=$p";
 			}
+				$p++;
 			if ($mode != "admin") {
 				$arg['headline'][] = array('url'=>"{$_SERVER['PHP_SELF']}$url#$num", 'subj'=>$subj, 'cnt'=>$res_num);
 			}
@@ -292,7 +298,7 @@ function all_view($page,$mode="") {
     array_splice($arg['headline'], MAXHEADLINE);
   }
   // 親記事展開
-  	for ($i = $page; $i < $page+PAGEDEF; $i++) {
+  	for ($i = $page; $i < $page+PAGEDEF; $i++) {//PAGEDEF単位でスレッドを作成
 		if (!isset($oya[$i])) continue;
 		// if (!trim($oya[$i])) continue;
 		list($num,$date,$name,$email,$subj,$com,$url,$col,$icon,$type,,$host) = explode("<>", $oya[$i]);
@@ -367,7 +373,7 @@ function all_view($page,$mode="") {
   if ($next < count($oya)) $arg['next'] = "{$_SERVER['PHP_SELF']}?page=$next$qry";
   // ページ直接移動
   $tpage = (int)count($oya) / PAGEDEF;
-  $pp=0;
+  $pp=0;$arg['paging']='';
   for ($a = 0; $a < $tpage; $a++) {
     if ($a == $page/PAGEDEF) $arg['paging'].= "[<b>$a</b>] ";
     else $arg['paging'].= "[<a href=\"{$_SERVER['PHP_SELF']}?page=$pp$qry\"><b>$a</b></a>] ";
@@ -385,9 +391,9 @@ function all_view($page,$mode="") {
 
   // クッキー
   $arg['cname'] = $_COOKIE['ibbs']['name'];
-  $arg['cemail'] = $_COOKIE['ibbs']['email'];
+  $arg['cemail'] =(isset($_COOKIE['ibbs']['email']))?(isset($_COOKIE['ibbs']['email'])):'';
   $arg['cpass'] = $_COOKIE['ibbs']['pass'];
-  $arg['curl'] = $_COOKIE['ibbs']['url'];
+  $arg['curl'] = (isset($_COOKIE['ibbs']['url']))?(isset($_COOKIE['ibbs']['url'])):'';
 
   if ($mode == "admin") {
     $arg['admin'] = true;
@@ -396,8 +402,9 @@ function all_view($page,$mode="") {
     htmloutput(OTHERFILE,$arg);
   }
   else {
-    $arg['font'] = radio_list("font");
-    $arg['hr']   = radio_list("hr");
+	$arg['font'] = radio_list("font");
+	
+	$arg['hr']   = radio_list("hr");
     $arg['icon'] = option_list();
 	$arg['self'] = PHP_SELF;
     htmloutput(MAINFILE,$arg);
