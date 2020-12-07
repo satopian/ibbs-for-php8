@@ -1,10 +1,4 @@
 <?php
-if (phpversion()<"4.1.0") {
-  $_GET = $HTTP_GET_VARS;
-  $_POST = $HTTP_POST_VARS;
-  $_SERVER = $HTTP_SERVER_VARS;
-  $_COOKIE = $HTTP_COOKIE_VARS;
-}
 /***********************************
   * PHP-I-BOARD
   *               by ToR http://php.s3.to/
@@ -281,9 +275,8 @@ function all_view($page,$mode="") {
 			$oya[] = $lines[$h];
 			$res_num = isset($res[$num]) ? count($res[$num]):0;//レス先の親のnoと一致するレスの数を数える
 			$o_num++;
-			$ptop = PAGEDEF * $p;
 			$url='';
-			if ($ptop > $o_num) {
+			if (PAGEDEF < $o_num) {
 				
 				$url = "?page=$p";
 			}
@@ -551,9 +544,7 @@ function check() {
     $ico = $_POST['ico'];
   }
   // 全$_POSTに適用
-  $post = array_map("htmlspecialchars",$_POST);
-//   if (get_magic_quotes_gpc())
-//     $post = array_map("stripslashes", $post);
+  $post  = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
   // 無題
   if (trim($post['subject'])=="") $post['subject'] = "(無題)";
   // 改行処理
@@ -766,18 +757,19 @@ function search() {
     // スペース区切りを配列に
     $word = htmlspecialchars($_GET['w']);
     $words = preg_split("/(　| )+/", $word);
-    // ログ決定
-    if ($_GET['logs'] == 0) {
+	// ログ決定
+    if ($logs=filter_input(INPUT_GET,'logs') == 0) {
       $lines = file(LOGFILE);
       array_shift($lines);
     }
-    elseif (file_exists(PASTDIR.$_GET['logs'].".txt")) {
-      $lines = file(PASTDIR.$_GET['logs'].".txt");
+    elseif (file_exists(PASTDIR.$logs.".txt")) {
+      $lines = file(PASTDIR.$logs.".txt");
     }
     else {
       return false;
     }
-    $result = array();
+	$result = array();
+	$andor=filter_input(INPUT_GET,'andor');
     foreach ($lines as $line) {	//ログを走査
       $find = FALSE;			//フラグ
       foreach ($words as $w) {
@@ -786,7 +778,7 @@ function search() {
           $find = TRUE;
           if ($_GET['kyo']) $line = str_replace($w, "<b style='color:green;background-color:#ffff66'>$w</b>", $line);
         }
-        elseif ($_GET['andor'] == "and") {	//ANDの場合マッチしないなら次のログへ
+        elseif ($andor == "and") {	//ANDの場合マッチしないなら次のログへ
           $find = FALSE;
           break;
         }
@@ -820,13 +812,14 @@ function search() {
       // ページ前/次
       $prev = $page - $page_def;
       $next = $i;
-      if ($prev >= 0)          $arg['prev'] = "{$_SERVER['PHP_SELF']}?mode=s&w=$word&andor=$andor&log=$log&pp=$page_def&page=$prev";
-      if ($next < count($result)) $arg['next'] = "{$_SERVER['PHP_SELF']}?mode=s&w=$word&andor=$andor&log=$log&pp=$page_def&page=$next";
+      if ($prev >= 0)          $arg['prev'] = "{$_SERVER['PHP_SELF']}?mode=s&w=$word&andor=$andor&log=$logs&pp=$page_def&page=$prev";
+      if ($next < count($result)) $arg['next'] = "{$_SERVER['PHP_SELF']}?mode=s&w=$word&andor=$andor&log=$logs&pp=$page_def&page=$next";
       // ページ直接移動
-      $tpage = ceil(count($result) / $page_def);
+	  $tpage = ceil(count($result) / $page_def);
+	  $pp=0;$arg['paging']='';
       for ($a = 0; $a < $tpage; $a++) {
         if ($a == $page/$page_def) $arg['paging'].= "[<b>$a</b>] ";
-        else $arg['paging'].= "[<a href=\"{$_SERVER['PHP_SELF']}?mode=s&w=$word&andor=$andor&log=$log&pp=$page_def&page=$pp\"><b>$a</b></a>] ";
+        else $arg['paging'].= "[<a href=\"{$_SERVER['PHP_SELF']}?mode=s&w=$word&andor=$andor&log=$logs&pp=$page_def&page=$pp\"><b>$a</b></a>] ";
         $pp += $page_def;
       }
       if ($_GET['all'] == 1)       $arg['logname'] = "No.{$word} の関連記事表示";
@@ -873,7 +866,7 @@ function past_view($logs, $page) {
     if ($next < count($lines)) $arg['next'] = "{$_SERVER['PHP_SELF']}?mode=log&logs=$logs&page=$next";
     // ページ直接移動
 	$tpage = (int)count($lines) / PASTDEF;
-	$pp=0;
+	$pp=0;$arg['paging']='';
     for ($a = 0; $a < $tpage; $a++) {
       if ($a == $page/PASTDEF) $arg['paging'].= "[<b>$a</b>] ";
       else $arg['paging'].= "[<a href=\"{$_SERVER['PHP_SELF']}?mode=log&logs=$logs&page=$pp\"><b>$a</b></a>] ";
