@@ -28,8 +28,7 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 }
 </STYLE>
 
-<META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=Shift_JIS">
-<title>PHP-I=BOARD [<% echo(num)%> RES]</title></head>
+<title>PHP-I=BOARD<% def(num)%> [<% echo(num)%> RES]<% /def %></title></head>
 <body text=#585858 link=#5C50CD vlink=#399563 bgcolor=#FFFFFF>
 <!--ヘッダ広告タグ挿入位置▽-->
 
@@ -101,12 +100,12 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 <% def(edit_mode)%>
 <!--編集モード 開始-->
 <blockquote><form action="<% echo(self)%>" method="POST">
-<input type=hidden name=delkey value="{$pass}">
+<input type=hidden name=delkey value="<% echo(pass)%>">
 <input type=hidden name=mode value=rewrite>
 <input type=hidden name=num value=<% echo(num)%>>
 <table bgcolor=#FFFFFF align=center>
 <tr><td>Name</td><td>/<input type=text name="name" value="<% echo(name)%>" size=35></td></tr>
-<tr><td>E-Mail</td><td>/<input type=text name="email" value="{$email}" size=35></td></tr>
+<tr><td>E-Mail</td><td>/<input type=text name="email" value="<% echo(email)%>" size=35></td></tr>
 
 <tr><td>Title</td><td>/<input type=text name="subject" size=35 value="<% echo(subj)%>"></td></tr>
 <tr><td>URL</td><td>/<input type=text name="url" value="http://<% echo(url)%>" size=60></td></tr>
@@ -133,7 +132,7 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 <% def(admin)%>
 <!--管理モード 開始-->
 <ul>
-□ ログサイズ/{$size}バイト 記事数/{$total} <small>(親/{$oyakiji} レス/{$reskiji})</small><br>
+□ ログサイズ/<% echo(size)%>バイト 記事数/<% echo(total)%> <small>(親/<% echo(oyakiji)%> レス/<% echo(reskiji)%>)</small><br>
 ■ 記事を編集したい場合、その記事のタイトルをクリック。<br>
 ■ 削除したい記事にチェックを入れ「削除」ボタンを押す。<br>
 □ 親記事を削除するとレス記事もすべて削除されます。
@@ -141,27 +140,27 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 
 <form action="<% echo(self)%>" method=POST>
 <input type=hidden name=mode value="del">
-<input type=hidden name=delkey value="{$pass}">
+<input type=hidden name=delkey value="<% echo(pass)%>">
 <table border=1 width=90% bordercolor=#749FF1>
 <tr bgcolor=#749FF1><th>チェック</th><th colspan=2>記事NO</th>
 <th>タイトル</th><th>投稿者</th><th>コメント</th></tr>
-<!--{each oya}-->
-<tr><th><input type=checkbox name="del[]" value="{$oya/num}"></th>
-<th nowrap>親記事</th><td align=center>{$oya/num}</td><td>
-<a href="<% echo(self)%>?mode=edit&delkey={$pass}&del={$oya/num}">{$oya/subj}</a></td>
-<td>{$oya/name} <!--{def oya/email}--><a href="mailto:{$oya/email}">＠</a><!--{/def}--><br><font size=2>{$oya/host}</font></td><td>{$oya/com}</td></tr>
-<!--{each oya/res}-->
-<tr><th><input type=checkbox name="del[]" value="{$oya/res/num}"></th>
-<td align=center colspan=2>{$oya/res/num}<br><small>[{$oya/num}-{$oya/res/cnt}]</small></td><td>
-<a href="<% echo(self)%>?mode=edit&delkey={$pass}&del={$oya/res/num}">{$oya/res/subj}</a></td>
-<td>{$oya/res/name} <!--{def oya/res/email}--><a href="mailto:{$oya/res/email}">＠</a><!--{/def}--><br><font size=2>{$oya/res/host}</font></td><td>{$oya/res/com}</td></tr>
-<!--{/each}-->
-<!--{/each}-->
+<% each(oya)%>
+<tr><th><input type=checkbox name="del[]" value="<% echo(oya/num)%>"></th>
+<th nowrap>親記事</th><td align=center><% echo(oya/num)%></td><td>
+<a href="<% echo(self)%>?mode=edit&delkey=<% echo(pass)%>&del=<% echo(oya/num)%>"><% echo(oya/subj)%></a></td>
+<td><% echo(oya/name)%> <% def(oya/email)%><a href="mailto:<% echo(oya/email)%>">＠</a><% /def %><br><font size=2><% echo(oya/host)%></font></td><td><% echo(oya/com)%></td></tr>
+<% each(oya/res)%>
+<tr><th><input type=checkbox name="del[]" value="<% echo(oya/res/num)%>"></th>
+<td align=center colspan=2><% echo(oya/res/num)%><br><small>[<% echo(oya/num)%>-<% echo(oya/res/cnt)%>]</small></td><td>
+<a href="<% echo(self)%>?mode=edit&delkey=<% echo(pass)%>&del=<% echo(oya/res/num)%>"><% echo(oya/res/subj)%></a></td>
+<td><% echo(oya/res/name)%> <% def(oya/res/email)%><a href="mailto:<% echo(oya/res/email)%>">＠</a><% /def %><br><font size=2><% echo(oya/res/host)%></font></td><td><% echo(oya/res/com)%></td></tr>
+<% /each %>
+<% /each %>
 </table><br><input type=submit value=" 削除 ">
 <input type=reset value="リセット"></form>
-<!--{def prev}--><b>[<a href="{$prev}">前の{$page_def}件</a>]</b><!--{/def}-->&nbsp;
-<!--{def next}--><b>[<a href="{$next}">次の{$page_def}件</a>]</b><!--{/def}-->
-<br><br>Page : {$paging}
+<% def(prev)%><b>[<a href="<% echo(prev)%>">前の<% echo(page_def)%>件</a>]</b><% /def %>&nbsp;
+<% def(next)%><b>[<a href="<% echo(next)%>">次の<% echo(page_def)%>件</a>]</b><% /def %>
+<br><br>Page : <% echo(paging)%>
 <hr width=90%>
 </center>
 <!--管理モード 終了-->
@@ -175,17 +174,19 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 
 </td></tr></table>
 <hr width=90%>
-<form action="<% echo(self)%>" method=GET>
+<form action="<% echo(self)%>" method=GET>	
 <input type=hidden name=mode value=s>
 <table><tr>
-<td bgcolor=#749FF1>キーワード</td><td>/ <input type=text name=w size=20 value="{$word}" onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
+<td bgcolor=#749FF1>キーワード</td><td>/ <input type=text name=w size=20 value="<% def(word)%><% echo(word)%><% /def %>" onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
 <td bgcolor=#749FF1>検索条件</td>
 <td>/ <select name=andor><option value=and>AND<option value=or>OR</select></td></tr>
 <tr><td bgcolor=#749FF1>検索範囲</td><td>/ <select name=logs>
 <option value="0">現在のログ
-<% each(past)%>
-<option value="{$past/no}"{$past/sel}>過去ログ{$past/no}</option>
+	<% def(is_pastlog)%>
+	<% each(past)%>
+<option value="<% echo(past/no)%>"<% echo(past/sel)%>>過去ログ<% echo(past/no)%></option>
 <% /each %>
+<% /def %>
 </select></td>
 <td bgcolor=#749FF1>強調表示</td><td>/ <input type=checkbox name=kyo value=1 onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';">ON
 <small>(自動リンクOFF)</small></td></tr>
@@ -200,67 +201,68 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 </td></tr></table></form></center>
 
 <% def(out)%>
-<center><hr width=90%><h3>{$logname}</h3>
-<b>ヒット / {$total}件</b> ({$st}-{$to}を表示) / 
-Page : {$paging}
+<center><hr width=90%><h3><% echo(logname)%></h3>
+<b>ヒット / <% echo(total)%>件</b> (<% echo(st)%>-<% echo(to)%>を表示) / 
+Page : <% echo(paging)%>
 <form action="<% echo(self)%>" method=POST>
 <input type=hidden name=mode value="del">
 <input type=hidden name=logs value="0">
 
-<!--{each out}-->
+<% each(out)%>
 <table width=80% bgcolor=#FFFFFF border=1><tr><td>
 <table width=100%><tr><th bgcolor=#749FF1>
-<font color=#ffffff>No.{$out/num}/{$out/subj}</font></th></tr><tr><td nowrap>
-■投稿者/ {$out/name} -<small>({$out/date})<br><!--{$out/host}--></small></td>
-</tr><tr><td><br><ul>{$out/com}</ul></td>
-</table><div align=right><!--{def out/oya}-->親記事<!--{/def}-->
-<!--{def out/res}-->No.{$out/res} のレス<!--{/def}-->
+<font color=#ffffff>No.<% echo(out/num)%>/<% echo(out/subj)%></font></th></tr><tr><td nowrap>
+■投稿者/ <% echo(out/name)%> -<small>(<% echo(out/date)%>)<br><!--<% echo(out/host)%>--></small></td>
+</tr><tr><td><br><ul><% echo(out/com)%></ul></td>
+</table><div align=right><% def(out/oya)%>親記事<% /def %>
+<% def(out/res)%>No.<% echo(out/res)%> のレス<% /def %>
  /
-<a href="<% echo(self)%>?mode=s&all=1&w={$out/num}&logs={$logs}">関連記事表示</a><br>
-削除チェック/<input type=checkbox name=del value={$out/num} onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></div></td></tr></table><br>
-<!--{/each}-->
-<!--{def prev}--><b>[<a href="{$prev}">前の{$page_def}件</a>]</b><!--{/def}-->&nbsp;
-<!--{def next}--><b>[<a href="{$next}">次の{$page_def}件</a>]</b><!--{/def}-->
-<br><br>Page : {$paging}
+<a href="<% echo(self)%>?mode=s&all=1&w=<% echo(out/num)%>&logs=<% echo(logs)%>">関連記事表示</a><br>
+削除チェック/<input type=checkbox name="del[]"" value=<% echo(out/num)%> onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></div></td></tr></table><br>
+<% /each %>
+<% def(prev)%><b>[<a href="<% echo(prev)%>">前の<% echo(page_def)%>件</a>]</b><% /def %>&nbsp;
+<% def(next)%><b>[<a href="<% echo(next)%>">次の<% echo(page_def)%>件</a>]</b><% /def %>
+<br><br>Page : <% echo(paging)%>
 </center>
 <hr width=90%>
-<div align=right>パスワード/<input type=password name=pas size=4 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';">
-<input type=submit value="管理用" onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></form></div>
-<% /def %>
+<div align=right>パスワード/<input type=password name=delkey size=4 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';">
+<input type=submit value="削除" onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></form></div>
 <!--検索モード 終了-->
+<% /def %>
 <% /def %>
 
 <% def(past_mode)%>
 <!--過去ログモード 開始-->
-<center><!--{def logs}--><h3>{$logname}</h3><!--{/def}-->
-<table><tr><th>表示ログ</th><td>
-<!--{each past}-->
-<!--{def past/link}--><a href="<% echo(self)%>?mode=log&logs={$past/no}"><!--{/def}-->過去ログ{$past/no}</a> {$past/br}
-<!--{/each}-->
+<center><% def(logs)%><h3><% echo(logname)%></h3><% /def %>
+<table><% def(is_pastlog)%><tr><th>表示ログ</th><td>
+<% each(past)%>
+<% def(past/link)%><a href="<% echo(self)%>?mode=log&logs=<% echo(past/no)%>"><% /def %>過去ログ<% echo(past/no)%></a> <% def(past/br)%><% echo(past/br)%><% /def %>
+<% /each %>
+<% /def %>
 </td></tr></table><br>過去ログ検索は <a href="<% echo(self)%>?mode=s">SEARCH</a> より行えます。
 <% def(out)%>
 <hr width=90%>
 
-<b>記事数 / {$total}件</b> ({$st}-{$to}を表示) / Page : {$paging}<br>
+<b>記事数 / <% echo(total)%>件</b> (<% echo(st)%>-<% echo(to)%>を表示) / Page : <% echo(paging)%><br>
 <form action="<% echo(self)%>" method=POST>
 <input type=hidden name=mode value="del">
-<input type=hidden name=logs value="{$logs}">
+<input type=hidden name=logs value="<% echo(logs)%>">
 
-<!--{each out}-->
+<% each(out)%>
 <table width=80% bgcolor=#FFFFFF border=1><tr><td>
 <table width=100%><tr><th bgcolor=#749FF1>
-<font color=#ffffff>No.{$out/num}/{$out/subj}</font></th></tr><tr><td nowrap>
-■投稿者/ {$out/name} -<small>({$out/date})<br><!--{$out/host}--></small></td>
-</tr><tr><td><br><ul>{$out/com}</ul></td>
-</table><div align=right><!--{def out/oya}-->親記事<!--{/def}-->
-<!--{def out/res}-->No.{$out/res} のレス<!--{/def}-->
+<font color=#ffffff>No.<% echo(out/num)%>/<% echo(out/subj)%></font></th></tr><tr><td nowrap>
+■投稿者/ <% echo(out/name)%> -<small>(<% echo(out/date)%>)<br><!--<% echo(out/host)%>--></small></td>
+</tr><tr><td><br><ul><% echo(out/com)%></ul></td>
+</table><div align=right><% def(out/oya)%>親記事<% /def %>
+<% def(out/res)%>No.<% echo(out/res)%> のレス<% /def %>
  /
-<a href="<% echo(self)%>?mode=s&all=1&w={$out/num}&logs={$logs}">関連記事表示</a><br>
-削除チェック/<input type=checkbox name=del value={$out/num} onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></div></td></tr></table><br>
-<!--{/each}-->
-<!--{def prev}--><b>[<a href="{$prev}">前の{$page_def}件</a>]</b><!--{/def}-->&nbsp;
-<!--{def next}--><b>[<a href="{$next}">次の{$page_def}件</a>]</b><!--{/def}-->
-<br><br>Page : {$paging}
+<a href="<% echo(self)%>?mode=s&all=1&w=<% echo(out/num)%>&logs=<% echo(logs)%>">関連記事表示</a><br>
+削除チェック/<input type=checkbox name=del value=<% echo(out/num)%> onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></div></td></tr></table><br>
+<% /each %>
+<% def(prev)%><b>[<a href="<% echo(prev)%>">前の<% echo(page_def)%>件</a>]</b><% /def %>&nbsp;
+<% def(next)%><b>[<a href="<% echo(next)%>">次の<% echo(page_def)%>件</a>]</b><% /def %>
+<br><br>Page : <% echo(paging)%>
 </center>
 <hr width=90%>
 <div align=right>パスワード/<input type=password name=pas size=4 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';">
@@ -286,7 +288,7 @@ Page : {$paging}
 <table width=65% align=center bgcolor=#FFFFFF><tr><td>
 <ul type="square">
 <li>この掲示板 (以下BBS) はタグを<b>使用できません。</b></li>
-<li>記事は<b>最大{$maxlog}件まで</b>保持できます。</li>
+<li>記事は<b>最大<% echo(maxlog)%>件まで</b>保持できます。</li>
 <li>他人を中傷するような記事は管理者の判断で予告無く削除する場合があります。</li>
 <li><b>名前、コメントは必須記入項目</b>です。記入漏れするとエラーになります。</li>
 <li>このBBSは、<b>クッキー対応</b>です。(ブラウザでクッキー有効にしている時に限り)</li>
@@ -339,10 +341,9 @@ Page : {$paging}
 <td><input type=submit value="送 信" onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';">
 <input type=reset value="リセット" onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></td></tr></table></form>
 </center>
-<% /def %>
-
+<% /def %>	
 <!--著作権表示 削除しないでください-->
-<hr width=90%><center>- <a href="http://php.s3.to/" target=_top>レッツPHP!</a> refer to <a href="http://www.cj-c.com/" target="_top">I-BOARD</a> -</center>
+<hr width=90%><center>- <a href="http://php.loglog.jp/" target=_top>レッツPHP!</a> & <a href="https://pbbs.sakura.ne.jp/" target="_top">@satopian</a> -</center>
 <!--フッタ広告タグ挿入位置▽-->
 
 <!--△ここまで-->

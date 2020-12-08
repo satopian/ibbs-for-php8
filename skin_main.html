@@ -29,7 +29,6 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 }
 </STYLE>
 
-<META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=Shift_JIS">
 <title>PHP-I-BOARD</title></head>
 <body text=#585858 link=#5C50CD vlink=#399563 bgcolor=#FFFFFF>
 <!--ヘッダ広告タグ挿入位置▽-->
@@ -40,7 +39,7 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 <br><br><table border=0><tr><td bgcolor=#FFFFFF>
 <font color=#8187FC><% echo(count)%></font></td></tr></table>
 <hr width=90%>
-□<a href="https://pbbs.sakura.ne.jp/"> HOME</a>　
+□<a href="<% echo(home_url)%>"> HOME</a>　
 □<a href="<% echo(self) %>?mode=man"> HELP</a>　
 □<a href="<% echo(self) %>?mode=s"> SEARCH</a>　
 <!--{def kako}-->□ <a href="<% echo(self) %>?mode=log">過去ログ</a><!--{/def}-->
@@ -117,7 +116,7 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 <% each(oya/res) %>
 <tr><th bgcolor=<% echo(oya/res/b_color)%> colspan=2><font color=#5B5B5B>[<% echo(oya/res/num) %>] <% echo(oya/res/subj)%></font></th></tr>
 
-<tr><td colspan=2>□ <% echo(oya/res/name)%><% def(oya/res/email)%> <a href="mailto:<% echo($oya/res/email)%>">＠</a><% /def %>-<small>(<% echo(oya/res/date)%><% def(oya/res/url)%>/<a href="<% echo(oya/res/url)%>" target=_top>URL</a><% /def %>)/Res<% echo(oya/res/cnt)%></small><br></td></tr>
+<tr><td colspan=2>□ <% echo(oya/res/name)%><% def(oya/res/email)%> <a href="mailto:<% echo($oya/res/email)%>">＠</a><% /def %>-<small>(<% echo(oya/res/date)%><% def(oya/res/url)%>) <a href="<% echo(oya/res/url)%>" target=_top><img src="./Icon/home2.gif" width=15 height=15 border=0></a><% /def %> Res<% echo(oya/res/cnt)%></small><br></td></tr>
 
 
 <tr><td width=10%><% def(oya/res/icon)%><img src="<% echo(oya/res/icon)%>" align=middle><% /def %>
@@ -169,7 +168,7 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 <input type="password" name="pass" size=6 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"><input type=submit value="管理用" onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';"><br>
 </form></div>
 <!--著作権表示 削除しないでください-->
-<hr width=90%><center>- <a href="http://php.s3.to/" target=_top>レッツPHP!</a> refer to <a href="http://www.cj-c.com/" target="_top">I-BOARD</a> -</center>
+<hr width=90%><center>- <a href="http://php.loglog.jp/" target=_top>レッツPHP!</a> & <a href="https://pbbs.sakura.ne.jp/" target="_top">@satopian</a> -</center>
 <!--フッタ広告タグ挿入位置▽-->
 
 <!--△ここまで-->

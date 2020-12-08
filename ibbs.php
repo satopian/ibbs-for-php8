@@ -27,148 +27,8 @@
 　　・ibbs.dat,icount.dat,ilog.logの属性を666か646にする。
   　・過去ログ使用の場合は生成ﾃﾞｨﾚｸﾄﾘ（./ならpublic_html等)の属性777か757にする
 */
-// require_once("htmltemplate.inc"); 
 require_once(__DIR__.'/Skinny.php');
-
-
-// スクリプト名
-define('PHP_SELF', "ibbs.php");
-
-// ログファイル名(権限を606,646,666等にする)
-define('LOGFILE', "ibbs.dat");
-
-// 管理パス
-define('ADMINPASS', "1234");
-
-// 投稿通知メールを送るyes=1 no=0
-define('NOTICE', 0);
-// 通知メール送信先
-$admin_mail = "all@s.to";
-
-// レスがついたら記事を上げる？yes=1 no=0
-define('AGE', 1);
-
-// URLを自動リンクする？
-define('AUTOLINK', 1);
-// 投稿後の飛び先
-$jump = "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
-
-// 投稿制限文字数。上から名前、タイトル、コメント。半角で
-define('MAXNAME', 32);
-define('MAXSUBJ', 32);
-define('MAXCOM', 1000);
-// 最小文字数
-define('MINCOM', 4);
-// 改行数制限
-define('MAXBR', 20);
-
-// 親記事最大ログ保持件数
-define('MAXLOG', 40);
-
-// ヘッドライン表示件数(↑の数以下で）
-define('MAXHEADLINE', 30);
-
-// 色指定がない時の色
-define('NOCOL', "#666666");
-
-// アイコンの設定
-// アイコン用ディレクトリ
-define('I_DIR', "./Icon/");
-// HTML表示用アイコン一覧 'ファイル名'=>'アイコン名'をペアで
-$html_icon = array('randam'=>'ランダム','cat1.gif'=>'しろねこ','dog1.gif'=>'いぬ',
-                   'rob1.gif'=>'くるくるロボ','pen1.gif'=>'ぺんぎん','td1.gif'=>'くま',
-                   'rabi1.gif'=>'うさぎ','ball1.gif'=>'ぼーるやろう','tel1.gif'=>'てるてるお嬢','master'=>'管理者用');
-// ランダムの画像候補
-$rand_icon = array('cat1.gif','dog1.gif','rob1.gif','pen1.gif','td1.gif','rabi1.gif','ball1.gif','tel1.gif');
-
-// 管理者用アイコン
-$mas_i= array('master.gif','master2.gif','master3.gif');
-// 管理者アイコンパスワード 削除キーに入れる 使い分けることによって複数の管理者アイコンが使用可能
-$mas_p= array('7777','8888','9999');
-$Ico_h= 5; // アイコン一覧で改行をする数
-
-// 文字色
-$font = array('#585858','#C043E0','#3947C6','#F25353','#EF8816','#67AC22','#34A086','#7191FF','#FF819B');
-// 枠線色
-$hr   = array('#FAAFAB','#FBB85E','#C785E0','#9FC1FB','#EDE94E','#70D179','#969696','#C8CCFF','#E0D0B0');
-
-// 閲覧禁止ホスト
-$no_host[] = 'kantei.go.jp';
-$no_host[] = 'anonymizer.com';
-
-// 使用禁止ワード
-$no_word[] = '死ね';
-$no_word[] = '<img';
-$no_word[] = '<script';
-$no_word[] = 'http:';
-
-// 過去ログ機能を使う？Yes=1,No=0（使用する場合は保存ﾃﾞｨﾚｸﾄﾘを757,777等にする）
-define('PAST', 0);
-define('PASTLOG', "ilog.log"); // 過去ログカウントファイル
-define('PASTDIR', "./");       // 過去ログ生成ディレクトリ(/で終わる事)
-define('PASTSIZE', "100");     // 過去ログ記録数 KB
-define('PASTDEF', 20);         // 過去ログモードでの表示件数
-
-// カウンタを使う？
-define('COUNTER', 1);
-define('COUNTIMG', "");    //カウンタ画像のディレクトリ（テキストの場合は空。/で終わる）
-define('COUNTLOG', "icount.dat"); //カウンタファイル(権限を606,646',666等にする)
-
-// 機種判別
-//$ua = explode("/", getenv('HTTP_USER_AGENT'));
-//ibbs.php?ua=DoCoMoとか
-// if ($_GET['ua']) $ua[0] = $_GET['ua'];
-// if(preg_match("/^KDDI/",$ua[0])){
-//   //WAP2.0の場合
-//   define('MAINFILE', "i_skin_main.html");
-//   define('OTHERFILE', "i_skin_other.html");
-//   define('PAGEDEF', 5);
-//   define('RESDEF', 3);
-//   define('RESEVERY', 5);
-//   define('MOBILE', 1);
-// }
-// switch( $ua[0] ){
-// case "PDXGW" :
-//   //H"
-// case "UP.Browser" :
-//   //HDMLの場合
-// case "J-PHONE" :
-//   //J-PHONEの場合
-// case "DoCoMo" :
-//   // デザインファイル携帯
-//   define('MAINFILE', "i_skin_main.html");
-//   define('OTHERFILE', "i_skin_other.html");
-//   define('PAGEDEF', 5);//親記事表示数
-//   define('RESDEF', 3);//レス表示数
-//   define('RESEVERY', 5);//レス？件ずつ
-//   define('MOBILE', 1);//携帯モードは日付表示省略
-//   break;
-// case 'line'://一行レス
-  // デザインファイルPC
-//   define('MAINFILE', "skin_main_line.html");
-//   define('OTHERFILE', "skin_other.html");
-  // 1ページに表示する親記事数
-//   define('PAGEDEF', 5);
-  // 1親記事に表示するレス数
-//   define('RESDEF', 5);
-  // 先頭？件、最新？件表示
-//   define('RESEVERY', 10);
-//   break;
-// default :
-  // デザインファイルPC
-  define('MAINFILE', 'skin_main.html');
-  define('OTHERFILE', 'skin_other.html');
-  // 1ページに表示する親記事数
-  define('PAGEDEF', 5);
-  // 1親記事に表示するレス数
-  define('RESDEF', 5);
-  // 先頭？件、最新？件表示
-  define('RESEVERY', 10);
-  // 携帯時は日付を省略
-  define('MOBILE', 0);
-//   break;
-// }
-//---設定ここまで
+require(__DIR__.'/config.php');
 
 // 禁止ホスト
 if (is_array($no_host)) {
@@ -259,8 +119,8 @@ function all_view($page,$mode="") {
   list(,,,,$up) = explode("<>", $lines[0]);
   $arg['update'] = gmdate("Y/m/d(D) H:i:s",time()+9*60*60);
   // ヘッドライン
-  $res=[];$o_num=0;
-//   for ($h = 1; $h < count($lines); $h++) {
+	$res=[];$o_num=0;
+	$oya=[];
 	foreach ($lines as $h =>$val) {
 		if($h===0){
 			continue;
@@ -277,7 +137,6 @@ function all_view($page,$mode="") {
 			$o_num++;
 			$url='';
 			if (PAGEDEF < $o_num) {
-				
 				$url = "?page=$p";
 			}
 				$p++;
@@ -286,6 +145,7 @@ function all_view($page,$mode="") {
 			}
 		}
 	}
+	$arg['headline']=isset($arg['headline']) ? $arg['headline']:[]; 
   if (count($arg['headline']) > MAXHEADLINE) {
     array_splice($arg['headline'], 0, $page);
     array_splice($arg['headline'], MAXHEADLINE);
@@ -400,6 +260,7 @@ function all_view($page,$mode="") {
 	$arg['hr']   = radio_list("hr");
     $arg['icon'] = option_list();
 	$arg['self'] = PHP_SELF;
+	$arg['home_url']=HOME_URL;
     htmloutput(MAINFILE,$arg);
   }
 }
@@ -429,7 +290,7 @@ function res_view($num) {
   fclose ($fd);
 
   // old-最初から？件、new-最新？件、all-全レス表示、通常-最新X件
-  switch ($_GET['res']) {
+  switch (filter_input(INPUT_GET,'res')) {
     case 'old': $st = 0; $to = RESEVERY; break;
     case 'new': $st = count($res)-RESEVERY; $to = count($res); break;
     case 'all': $st = 0; $to = count($res); break;
@@ -449,7 +310,7 @@ function res_view($num) {
     if ($rb_color == "") $rb_color = NOCOL;
     // if ($rurl) $rurl = "http://".$rurl;
     // 引用
-    if (isset($_GET['q']) && $_GET['q'] == $rnum) {
+    if (filter_input(INPUT_GET,'q') == $rnum) {
       $q_com = "&gt;$rcom";
       $rrcom = str_replace("<br>","\r&gt;",$q_com);
     }
@@ -468,7 +329,7 @@ function res_view($num) {
   if ($b_color == "") $b_color = NOCOL;
 //   if ($url) $url = "http://".$url;
   // 引用
-  if (isset($_GET['q']) && $_GET['q'] == $num) {
+  if (filter_input(INPUT_GET,'q')  == $num) {
     $q_com = "&gt;$com";
     $rrcom = str_replace("<br>","\r&gt;",$q_com);
   }
@@ -572,8 +433,11 @@ function log_write($post) {
   $fline = fgets($fp, 2048);
   fclose($fp);
   // 重複カキ子チェック
-  list($num,$rname,$rcom,$rip,)  = explode("<>", $fline);
-  if ($rname == $post['name'] && $rcom == $post['comment']) error("同じ内容は送信できません");
+  $num=0;
+  if($fline){
+	  list($num,$rname,$rcom,$rip,)  = explode("<>", $fline);
+	  if ($rname == $post['name'] && $rcom == $post['comment']) error("同じ内容は送信できません");
+  }
   // 新No.
   $newnum = $num+1;
   $font = $post['font'].";".$post['hr'];
@@ -677,7 +541,7 @@ EOL;
 }
 /*-- 個別記事削除 --*/
 function del() {
-  if (trim($_POST['del']) == "") error("記事No.が入力されてません!");
+  if ($_POST['del'] == "") error("記事No.が入力されてません!");
   if (trim($_POST['delkey']) == "") error("パスワードが入力されてません!");
 
   $lines = file(LOGFILE);
@@ -753,12 +617,13 @@ function rewrite($post, $target) {
 }
 /*-- 検索 --*/
 function search() {
-  if (trim($_GET['w']) != "") {
+	$word =filter_input(INPUT_GET,'w',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+	if (trim($word) != "") {
     // スペース区切りを配列に
-    $word = htmlspecialchars($_GET['w']);
     $words = preg_split("/(　| )+/", $word);
 	// ログ決定
-    if ($logs=filter_input(INPUT_GET,'logs') == 0) {
+	$logs=filter_input(INPUT_GET,'logs');
+    if ($logs == 0) {
       $lines = file(LOGFILE);
       array_shift($lines);
     }
@@ -767,7 +632,7 @@ function search() {
     }
     else {
       return false;
-    }
+	}
 	$result = array();
 	$andor=filter_input(INPUT_GET,'andor');
     foreach ($lines as $line) {	//ログを走査
@@ -776,7 +641,7 @@ function search() {
         if ($w == "") continue;	//空文字はパス
         if (stristr($line, $w)) {	//マッチ
           $find = TRUE;
-          if ($_GET['kyo']) $line = str_replace($w, "<b style='color:green;background-color:#ffff66'>$w</b>", $line);
+          if (filter_input(INPUT_GET,'kyo')) $line = str_replace($w, "<b style='color:green;background-color:#ffff66'>$w</b>", $line);
         }
         elseif ($andor == "and") {	//ANDの場合マッチしないなら次のログへ
           $find = FALSE;
@@ -788,22 +653,25 @@ function search() {
     $arg['total'] = count($result);
     // if (get_magic_quotes_gpc()) $word = stripslashes($word);
     $arg['word'] = $word;
+    // $arg['word'] = $word ? $word :'';
 
     if (count($result) > 0) {
-      $page_def = ($_GET['pp']) ? (int)$_GET['pp'] : PASTDEF;
-      $page = ($_GET['page']) ? (int)$_GET['page'] : 0;
+		$_pp=filter_input(INPUT_GET,'pp',FILTER_VALIDATE_INT);
+		$page=filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
+      $page_def = $_pp ? $_pp : PASTDEF;
+      $page = $page ? $page : 0;
       // 記事表示
       for ($i = $page; $i < $page+$page_def; $i++) {
         $oya = $res = "";
         if (!trim($result[$i])) break;
         list($num,$date,$name,$email,$subj,$com,$url,
-             $col,$icon,$type,,$host) = explode("<>", $result[$i]);
+			 $col,$icon,$type,,$host) = explode("<>", $result[$i]);
         list($color,$b_color) = explode(";", $col);
-        if ($url != "") $url = "http://".$url;
+        // if ($url != "") $url = "http://".$url;
         if ($icon != "") $icon = I_DIR.$icon;
         if ($type == 0) $oya = true;
         else $res = $type;
-        // 親記事格納
+		// 親記事格納
         $arg['out'][] = compact('num','date','name','email','subj','com','b_color','color','icon','host','oya','res','over','page');
       }
       $arg['page_def'] = $page_def;
@@ -821,15 +689,19 @@ function search() {
         if ($a == $page/$page_def) $arg['paging'].= "[<b>$a</b>] ";
         else $arg['paging'].= "[<a href=\"{$_SERVER['PHP_SELF']}?mode=s&w=$word&andor=$andor&log=$logs&pp=$page_def&page=$pp\"><b>$a</b></a>] ";
         $pp += $page_def;
-      }
+	  }
+	  $arg['logs']=filter_input(INPUT_GET,'logs') ? filter_input(INPUT_GET,'logs') :0;
       if ($_GET['all'] == 1)       $arg['logname'] = "No.{$word} の関連記事表示";
       elseif ($_GET['logs'] == 0)  $arg['logname'] = "現在のログを検索";
       elseif ($_GET['logs'])       $arg['logname'] = "過去ログ $logs を検索";
     }
   }
+  if (file_exists(PASTDIR."1.txt")) {
+	$arg['is_pastlog']=true;
+	}
   $pastno = file(PASTLOG);
   for ($i = $pastno[0]; $i > 0; $i--) {
-    $sel = ($_GET['logs'] == $i) ? " selected" : "";
+    $sel = (filter_input(INPUT_GET,'logs',FILTER_VALIDATE_INT) == $i) ? " selected" : "";
     $arg['past'][] = array('no'=>$i,'sel'=>$sel);
   }
   $arg['search_mode'] = true;
@@ -849,7 +721,7 @@ function past_view($logs, $page) {
       list($num,$date,$name,$email,$subj,$com,$url,
            $col,$icon,$type,,$host) = explode("<>", $lines[$i]);
       list($color,$b_color) = explode(";", $col);
-      if ($url != "") $url = "http://".$url;
+    //   if ($url != "") $url = "http://".$url;
       if ($icon != "") $icon = I_DIR.$icon;
       if ($type == 0) $oya = true;
       else $res = $type;
@@ -873,7 +745,8 @@ function past_view($logs, $page) {
       $pp += PASTDEF;
     }
     $arg['logname'] = "過去ログ $logs を表示";
-    $arg['total'] = count($lines);
+	$arg['total'] = count($lines);
+	$arg['is_pastlog']=true;
   }
   else {
     $arg['logname'] = "過去ログ が見つかりません";
@@ -885,6 +758,7 @@ function past_view($logs, $page) {
     if (($j % 4)==3) $arg['past'][$j]['br'] = "<br>";
   }
   $arg['logs'] = $logs;
+  $arg['logs'] = 0;
   $arg['past_mode'] = true;
   $arg['title'] = "過去ログ表示";
   $arg['self'] = PHP_SELF;
@@ -987,7 +861,7 @@ switch ($mode) {
   // 編集書込み
   case 'rewrite':
     $data = check();
-    rewrite($data, intval($_POST['num']));
+    rewrite($data, filter_input(INPUT_POST,'num',FILTER_VALIDATE_INT));
     echo "<META HTTP-EQUIV=\"refresh\" content=\"0;URL=".PHP_SELF."?\">";
     break;
   // 管理
@@ -996,7 +870,7 @@ switch ($mode) {
     break;
   // レス表示
   case 'res':
-    res_view(intval($_GET['num']));
+    res_view(filter_input(INPUT_GET,'num',FILTER_VALIDATE_INT));
     break;
   // 検索
   case 's':
@@ -1004,7 +878,8 @@ switch ($mode) {
     break;
   // 過去ログ表示
   case 'log':
-    past_view(intval($_GET['logs']), $page);
+	past_view(filter_input(INPUT_GET,'logs',FILTER_VALIDATE_INT), $page);
+	;
     break;
   // アイコン一覧
   case 'img':
