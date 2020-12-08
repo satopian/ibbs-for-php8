@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<STYLE TYPE="text/css">
+<style>
 A:link{    /* 未リンク */
 	text-decoration:none;
 }
@@ -26,21 +26,21 @@ border          :1 solid #749FF1; /*線の太さ、色*/
 input{
 font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 }
-</STYLE>
+</style>
 
 <title>PHP-I=BOARD<% def(num)%> [<% echo(num)%> RES]<% /def %></title></head>
 <body text=#585858 link=#5C50CD vlink=#399563 bgcolor=#FFFFFF>
 <!--ヘッダ広告タグ挿入位置▽-->
 
 □<a href="<% echo(self)%>?"> BACK</a>
-<table width=100% bgcolor=#749FF1><tr><th><% echo(title)%></th></tr></table>
+<table width="100%" bgcolor="#749FF1"><tr><th><% echo(title)%></th></tr></table>
 
 <% def(res_mode)%>
 <!--レス一覧 開始-->
 <br><center>
-<table width=80% bgcolor=#FFFFFF border=1 bordercolor="<% echo(b_color)%>"><tr><td>
-<table width=100% border=0>
-<tr><th bgcolor=<% echo(b_color)%> colspan=3><font color=#ffffff>[<% echo(num)%>] <% echo(subj)%></font></th></tr>
+<table width="80%" bgcolor="#FFFFFF" border=1 bordercolor="<% echo(b_color)%>"><tr><td>
+<table width="100%" border="0">
+<tr><th bgcolor="<% echo(b_color)%>" colspan="3"><font color="#ffffff">[<% echo(num)%>] <% echo(subj)%></font></th></tr>
 <tr><td colspan=3>□投稿者/ <% echo(name)%> <% def(email)%> <a href="mailto:<% echo(email)%>">＠</a><% /def %>-<small>(<% echo(date)%>)</small><% def(url)%> <a href="<% echo(url)%>" target=_top><img src="./Icon/home2.gif" width=15 height=15 border=0></a><% /def %></td></tr>
 <tr><td width=10%><% def(oyaicon)%><img src="<% echo(oyaicon)%>" align=middle><% /def %><br>[<a href="<% echo(self)%>?num=<% echo(num)%>&mode=res&q=<% echo(num)%>#F">引用</a>]</td>
 <td width=90%><br><font color="<% echo(color)%>"><% echo(com)%></font></td></tr>
@@ -70,12 +70,12 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 <input type=hidden name=mode value=write>
 <table>
 <tr><th colspan=6>△[<% echo(num)%>] <% echo(subj)%> へ返信</th></tr><tr>
-<td>Name</td><td>/<input type=text name="name" value="<% echo(cname)%>" size=20 maxlength=32 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
-<td>E-Mail</td><td>/<input type=text name="email" value="<% echo(cemail)%>" size=20 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
-<td>削除キー</td><td>/<input type=password maxlength=8 name="delkey" size=8 value="<% echo(cpass)%>" onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';">
+<td>Name</td><td>/<input type=text name="name" value="<% echo(cname)%>" size=20 maxlength=32 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';" autocomplete="username"></td>
+<td>E-Mail</td><td>/<input type="email" name="email" value="<% echo(cemail)%>" size=20 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
+<td>削除キー</td><td>/<input type=password maxlength=8 name="delkey" size=8 value="<% echo(cpass)%>" onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';" autocomplete="current-password">
 </td></tr><tr>
 <td>Title</td><td>/<input type=text name="subject" size=20 value="<% echo(rsubj)%>" onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';" maxlength=32></td>
-<td>URL</td><td colspan=3>/<input type=text name="url" value="<% echo(curl)%>" size=50 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
+<td>URL</td><td colspan=3>/<input type="url" name="url" value="<% echo(curl)%>" size=50 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
 </tr>
 <tr><td colspan=6>Comment/半角<% echo(maxcom)%>文字以内<br>
 　<textarea name="comment" rows=8 cols=65 wrap=soft onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"><% echo(rcom)%></textarea></td></tr>

@@ -244,9 +244,9 @@ function all_view($page,$mode="") {
 
   // クッキー
   $arg['cname'] = $_COOKIE['ibbs']['name'];
-  $arg['cemail'] =(isset($_COOKIE['ibbs']['email']))?(isset($_COOKIE['ibbs']['email'])):'';
+  $arg['cemail'] = isset($_COOKIE['ibbs']['email'])? $_COOKIE['ibbs']['email'] :'';
   $arg['cpass'] = $_COOKIE['ibbs']['pass'];
-  $arg['curl'] = (isset($_COOKIE['ibbs']['url']))?(isset($_COOKIE['ibbs']['url'])):'';
+  $arg['curl'] = isset($_COOKIE['ibbs']['url']) ? $_COOKIE['ibbs']['url']:'';
 
   if ($mode == "admin") {
     $arg['admin'] = true;
@@ -364,7 +364,7 @@ function check() {
 
   if (trim($_POST['name'])=="")   error("名前が入力されてません");
   if (preg_match("/^( |　|\t|\r|\n)*$/",$_POST['comment'])) error("コメントが入力されてません");
-  if (strlen($_POST['pass']) > 8) error("削除キーは8文字以上でお願いします");
+  if (strlen($_POST['delkey']) > 8) error("削除キーは8文字以上でお願いします");
   if (strlen($_POST['name']) > MAXNAME) error("名前は長すぎますっ！");
   if (strlen($_POST['subject']) > MAXSUBJ)  error("タイトルが長すぎますっ！");
   if (strlen($_POST['comment']) > MAXCOM)  error("本文が長すぎますっ！");
@@ -373,14 +373,7 @@ function check() {
     error("E-メールの入力内容が不正です!");
 
   // 禁止ワード
-  if (is_array($no_word)) {
-    foreach ($no_word as $fuck) {
-      if (preg_match("/$fuck/", $_POST['comment'])) error("使用できない文字が含まれています！");
-      if (preg_match("/$fuck/", $_POST['subject'])) error("使用できない文字が含まれています！");
-      if (preg_match("/$fuck/", $_POST['name'])) error("使用できない文字が含まれています！");
-    }
-  }
-  if (preg_match("/(<a\b[^>]*?>|\[url(?:\s?=|\]))|href=/i", $_POST['comment'])) error("エラー！！");
+  Reject_if_NGword_exists_in_the_post($_POST['comment'],$_POST['name'],$_POST['email'],$_POST['url'],$_POST['subject']);
   // 副題
   if ($_POST['sex']) $_POST['subject'] = $_POST['sex']."/".$_POST['subject'];
 
@@ -425,6 +418,70 @@ function check() {
 
   return $post;
 }
+/* NGワードがあれば拒絶 */
+function Reject_if_NGword_exists_in_the_post($com,$name,$email,$url,$sub){
+	global $badstring,$badname,$badstr_A,$badstr_B;
+
+	
+	//チェックする項目から改行・スペース・タブを消す
+	$chk_com  = preg_replace("/\s/u", "", $com );
+	$chk_name = preg_replace("/\s/u", "", $name );
+	$chk_email = preg_replace("/\s/u", "", $email );
+	$chk_sub = preg_replace("/\s/u", "", $sub );
+
+	//本文に日本語がなければ拒絶
+	if (USE_JAPANESEFILTER) {
+		mb_regex_encoding("UTF-8");
+		if (strlen($com) > 0 && !preg_match("/[ぁ-んァ-ヶー一-龠]+/u",$chk_com)) error('日本語で何か書いてください。');
+	}
+
+	//本文へのURLの書き込みを禁止
+	if(!(filter_input(INPUT_POST,'delkey')===ADMINPASS)){//どちらも一致しなければ
+		if(DENY_COMMENTS_URL && preg_match('/:\/\/|\.co|\.ly|\.gl|\.net|\.org|\.cc|\.ru|\.su|\.ua|\.gd/i', $com)) error('本文にURLを書く事はできません。');
+	}
+
+	// 使えない文字チェック
+	if (is_ngword($badstring, [$chk_com, $chk_sub, $chk_name, $chk_email])) {
+		error('拒絶されました不正な文字列があります');
+	}
+
+	// 使えない名前チェック
+	if (is_ngword($badname, $chk_name)) {
+		error('この名前は使えません');
+	}
+
+	//指定文字列が2つあると拒絶
+	$bstr_A_find = is_ngword($badstr_A, [$chk_com, $chk_sub, $chk_name, $chk_email]);
+	$bstr_B_find = is_ngword($badstr_B, [$chk_com, $chk_sub, $chk_name, $chk_email]);
+	if($bstr_A_find && $bstr_B_find){
+		error('拒絶されました不正な文字列があります');
+	}
+	if (preg_match("/(<a\b[^>]*?>|\[url(?:\s?=|\]))|href=/i", $com)) error("タグは使えません");
+}
+/**
+ * NGワードチェック
+ * @param $ngwords
+ * @param string|array $strs
+ * @return bool
+ */
+function is_ngword ($ngwords, $strs) {
+	if (empty($ngwords)) {
+		return false;
+	}
+	if (!is_array($strs)) {
+		$strs = [$strs];
+	}
+	foreach ($strs as $str) {
+		foreach($ngwords as $ngword){//拒絶する文字列
+			if ($ngword !== '' && preg_match("/{$ngword}/ui", $str)){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+
 /*-- ログ書込み処理 --*/
 function log_write($post) {
   global $admin_mail;

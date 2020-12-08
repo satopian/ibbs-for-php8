@@ -57,20 +57,20 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 
 <table bgcolor=#FFFFFF>
 <tr><td bgcolor=#749FF1>Name</td>
-<td>/<input type=text name="name" value="<% echo(cname) %>" size=25 maxlength=32 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
+<td>/<input type=text name="name" value="<% echo(cname) %>" size=25 maxlength=32 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';" autocomplete="username"></td>
 <td bgcolor=#749FF1>E-Mail</td>
-<td>/<input type=text name="email" value="<% echo(cemail) %>" size=25 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
+<td>/<input type="email" name="email" value="<% echo(cemail) %>" size=25 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
 
 <tr><td bgcolor=#749FF1>Title</td><td>/<input type=text name="subject" size=25 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';" maxlength=32></td>
 
 <td bgcolor=#749FF1>削除キー</td>
-<td>/<input type=password name=delkey value="<% echo(cpass)%>" size=8 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';">
+<td>/<input type=password name=delkey value="<% echo(cpass)%>" size=8 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';" autocomplete="current-password">
 <small>(半角8文字以内)</small></td></tr>
 <tr><td colspan=4 bgcolor=#749FF1>Comment/ <small>(適当に改行を入れて下さい/半角<% echo(maxcom)%>文字以内)</small><br>
 　<textarea name=comment rows=8 cols=70 wrap=soft onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></textarea></td></tr>
 
 <tr><td bgcolor=#749FF1>URL</td>
-<td colspan=3>/<input type=text name="url" value="<% echo(curl)%>" size=65 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
+<td colspan=3>/<input type="url" name="url" value="<% echo(curl)%>" size=65 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
 <tr><td bgcolor=#749FF1>文字色</td><td colspan=3>/
 <% each(font)%>
 <input type=radio name=font value="<% echo(font/color) %>"<% echo(font/chk)%>><font color="<% echo(font/color) %>">■</font>
@@ -157,8 +157,8 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 <select name="mode">
 <option value="edit">編集
 <option value="del">削除
-</select></td><td>記事No / <input type=text name=del size=5 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';">
-</td><td>削除キー / <input type=password name=delkey size=8 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';">
+</select></td><td>記事No / <input type='number' name=del size=5 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';">
+</td><td>削除キー / <input type=password name=delkey size=8 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';" autocomplete="current-password">
 <input type="submit" value=" 送信 " onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';">
 </td></tr></table></form></center>
 <hr width=90%>
