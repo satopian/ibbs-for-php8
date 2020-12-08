@@ -1,0 +1,4 @@
+<files ~ "(^config\.php$|\.(ini|log|dat|txt|json|html?)$)">
+	order allow,deny
+	deny from all
+</files>
