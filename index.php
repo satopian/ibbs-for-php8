@@ -30,6 +30,12 @@
 require_once(__DIR__.'/Skinny.php');
 require(__DIR__.'/config.php');
 
+if(!is_file(LOGFILE)){//LOGFILEがなければ作成
+	file_put_contents(LOGFILE,"\n", LOCK_EX);
+	chmod($syslog,0600);
+}
+
+
 // 禁止ホスト
 if (is_array($no_host)) {
   $host = gethostbyaddr($_SERVER["REMOTE_ADDR"]);
@@ -75,11 +81,9 @@ function radio_list($name, $select="") {
   // ｸｯｷｰが無い場合は0番目にセット
   if (!isset($_COOKIE['ibbs'][$name])) $select = ${$name}[0];
   foreach ($$name as $l=>$col) {
-    if ($_COOKIE['ibbs'][$name] == $col || $select == $col){
+	  $arg[$l]['chk'] = "";
+	  if ($_COOKIE['ibbs'][$name] == $col || $select == $col){
 		$arg[$l]['chk'] = " checked";
-	} else{
-		$arg[$l]['chk'] = "";
-	}
 	$arg[$l]['color'] = $col;
   }
   return $arg;
@@ -90,10 +94,9 @@ function option_list($select="") {
   $l = 0;
   if (in_array($_COOKIE['ibbs']['ico'], $mas_i)) $select = "master";
   foreach ($html_icon as $file=>$name) {
-    if ($_COOKIE['ibbs']['ico'] == $file || $select == $file){
+	$arg[$l]['sel'] = "";
+	if ($_COOKIE['ibbs']['ico'] == $file || $select == $file){
 		$arg[$l]['sel'] = " selected";
-	} else{
-		$arg[$l]['sel'] = "";
 	}
     $arg[$l]['file'] = $file;
     $arg[$l]['name'] = $name;
@@ -106,7 +109,7 @@ function all_view($page,$mode="") {
   global $html_icon,$font,$hr,$c;
 
   if ($mode == "admin") {
-    $pass = ($_GET['pass']) ? $_GET['pass'] : $_POST['pass'];
+    $pass = $_POST['pass'];
     if ($pass != ADMINPASS) error("パスワードが違います!");
   }
   // ログを配列に格納
@@ -364,7 +367,7 @@ function check() {
 
   if (trim($_POST['name'])=="")   error("名前が入力されてません");
   if (preg_match("/^( |　|\t|\r|\n)*$/",$_POST['comment'])) error("コメントが入力されてません");
-  if (strlen($_POST['delkey']) > 8) error("削除キーは8文字以上でお願いします");
+//   if (strlen($_POST['delkey']) > 8) error("削除キーは8文字以上でお願いします");
   if (strlen($_POST['name']) > MAXNAME) error("名前は長すぎますっ！");
   if (strlen($_POST['subject']) > MAXSUBJ)  error("タイトルが長すぎますっ！");
   if (strlen($_POST['comment']) > MAXCOM)  error("本文が長すぎますっ！");
@@ -622,7 +625,7 @@ function del() {
 function edit() {
   global $html_icon;
 
-  $del = ($_GET['del']) ? $_GET['del'] : $_POST['del'];
+  $del = $_POST['del'];
   $delkey = ($_GET['delkey']) ? $_GET['delkey'] : $_POST['delkey'];
   if (trim($_REQUEST['del']) == "") error("記事No.が入力されてません!");
   if (trim($_REQUEST['delkey']) == "") error("パスワードが入力されてません!");
