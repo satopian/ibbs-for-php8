@@ -617,16 +617,18 @@ function del() {
 
   $lines = file(LOGFILE);
   $find = false;
-  for ($i = 1; $i < count($lines); $i++) {
+	foreach($lines as $i =>$val){
+		if($i==0)continue;
     list($num,,,,$subj,,,,,$type,$cpass,)  = explode("<>", $lines[$i]);
-    if ($num == $_POST['del'] || @in_array($num, $_POST['del'])) {
-      if (ADMINPASS != $_POST['delkey']) {
-        if ($cpass == "") error("この記事には削除キーが存在しません!");
-        if ($cpass != crypt($_POST['delkey'], $cpass)) error("パスワードが違います!");
-      }
-      $lines[$i] = ($type != "0") ? "" : "$num<><><><><><><><><>$num<><><>\n";
-      $find = true;
-    }
+	if ($num == $_POST['del']||(is_array($_POST['del'])&&in_array($num, $_POST['del']))){
+
+	if (ADMINPASS != $_POST['delkey']) {
+		if ($cpass == "") error("この記事には削除キーが存在しません!");
+		if ($cpass != crypt($_POST['delkey'], $cpass)) error("パスワードが違います!");
+		}
+		$lines[$i] = ($type != "0") ? "" : "$num<><><><><><><><><>$num<><><>\n";
+		$find = true;
+		}
   }
   if (!$find) error("該当記事が見つかりません!");
 
