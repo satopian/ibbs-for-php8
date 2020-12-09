@@ -3,7 +3,7 @@
 define('HOME_URL', "https://pbbs.sakura.ne.jp/");
 
 // スクリプト名
-define('PHP_SELF', "ibbs.php");
+define('PHP_SELF', "index.php");
 
 // ログファイル名(権限を606,646,666等にする)
 define('LOGFILE', "ibbs.dat");
