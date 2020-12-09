@@ -1,5 +1,4 @@
 <?php
-
 /***********************************
   * PHP-I-BOARD
   *               by ToR http://php.s3.to/
@@ -413,7 +412,6 @@ function check() {
   }
   // 全$_POSTに適用
   $post  = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
- 
   // 無題
   if (trim($post['subject'])=="") $post['subject'] = "(無題)";
   // 改行処理
@@ -526,7 +524,7 @@ function log_write($post) {
   setcookie("ibbs[hr]", $post['hr'], time()+14*86400);
   setcookie("ibbs[pass]", $post['delkey'], time()+14*86400);
   setcookie("ibbs[url]", $post['url'], time()+14*86400);
- 
+
   if (NOTICE) {
     $mail_body = <<<EOL
 掲示板に投稿がありました。
@@ -639,7 +637,7 @@ function edit() {
   global $html_icon;
 
   $del = $_POST['del'];
-  $delkey = ($_GET['delkey']) ? $_GET['delkey'] : $_POST['delkey'];
+  $delkey = filter_input(INPUT_POST,'delkey');
   if (trim($_REQUEST['del']) == "") error("記事No.が入力されてません!");
   if (trim($_REQUEST['delkey']) == "") error("パスワードが入力されてません!");
 
@@ -650,7 +648,7 @@ function edit() {
     if ($num == $del) {
       if (ADMINPASS != $delkey) {
         if ($cpass == "") error("この記事には削除キーが存在しません!");
-        if ($cpass != crypt($_POST['delkey'], $cpass)) error("パスワードが違います!");
+        if ($cpass != crypt($delkey, $cpass)) error("パスワードが違います!");
       }
       $find = true;
       break;
@@ -675,7 +673,8 @@ function rewrite($post, $target) {
   $lines = file(LOGFILE);
   $find = false;
 
-  for ($i = 1; $i < count($lines); $i++) {
+	foreach($lines as $i =>$val){
+		if($i==0)continue;
     list($num,$now,,,,,,,,$type,$cpass,) = explode("<>", $lines[$i]);
     if ($num == $target && ($cpass == crypt($post['delkey'], $cpass) || $post['delkey'] == ADMINPASS)) {
       $find = true;
