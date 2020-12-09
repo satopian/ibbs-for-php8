@@ -147,12 +147,12 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 <% each(oya)%>
 <tr><th><input type=checkbox name="del[]" value="<% echo(oya/num)%>"></th>
 <th nowrap>親記事</th><td align=center><% echo(oya/num)%></td><td>
-<a href="<% echo(self)%>?mode=edit&delkey=<% echo(pass)%>&del=<% echo(oya/num)%>"><% echo(oya/subj)%></a></td>
+<% echo(oya/subj)%></td>
 <td><% echo(oya/name)%> <% def(oya/email)%><a href="mailto:<% echo(oya/email)%>">＠</a><% /def %><br><font size=2><% echo(oya/host)%></font></td><td><% echo(oya/com)%></td></tr>
 <% each(oya/res)%>
 <tr><th><input type=checkbox name="del[]" value="<% echo(oya/res/num)%>"></th>
 <td align=center colspan=2><% echo(oya/res/num)%><br><small>[<% echo(oya/num)%>-<% echo(oya/res/cnt)%>]</small></td><td>
-<a href="<% echo(self)%>?mode=edit&delkey=<% echo(pass)%>&del=<% echo(oya/res/num)%>"><% echo(oya/res/subj)%></a></td>
+<% echo(oya/res/subj)%></td>
 <td><% echo(oya/res/name)%> <% def(oya/res/email)%><a href="mailto:<% echo(oya/res/email)%>">＠</a><% /def %><br><font size=2><% echo(oya/res/host)%></font></td><td><% echo(oya/res/com)%></td></tr>
 <% /each %>
 <% /each %>
