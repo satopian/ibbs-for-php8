@@ -32,7 +32,7 @@ require(__DIR__.'/config.php');
 
 if(!is_file(LOGFILE)){//LOGFILEがなければ作成
 	file_put_contents(LOGFILE,"\n", LOCK_EX);
-	chmod($syslog,0600);
+	chmod(LOGFILE,0600);
 }
 
 
