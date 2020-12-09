@@ -1,4 +1,5 @@
 <?php
+
 /***********************************
   * PHP-I-BOARD
   *               by ToR http://php.s3.to/
@@ -51,7 +52,8 @@ if (COUNTER) {
   // ｸｯｷｰをセット。リロード防止用
   setcookie("ibbs[count]", 1, time()+14*86400);
   // ｸｯｷｰがなければ初訪問。でカウントアップ
-  if (!isset($_COOKIE['ibbs']['count'])) {
+  $cookie=filter_input(INPUT_COOKIE,'ibbs',FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
+  if (!isset($cookie['count'])) {
     $fp = fopen(COUNTLOG, "r+");
     $c = fgets($fp, 10);
     $c++;
@@ -77,34 +79,41 @@ if (COUNTER) {
 }
 /*-- 色HTML作成 --*/
 function radio_list($name, $select="") {
-  global $font,$hr;
-  // ｸｯｷｰが無い場合は0番目にセット
-  if (!isset($_COOKIE['ibbs'][$name])) $select = ${$name}[0];
-  foreach ($$name as $l=>$col) {
-	  $arg[$l]['chk'] = "";
-	  if ($_COOKIE['ibbs'][$name] == $col || $select == $col){
-		$arg[$l]['chk'] = " checked";
-	$arg[$l]['color'] = $col;
-  }
-  return $arg;
-}
-/*-- アイコンHTML作成 --*/
-function option_list($select="") {
-  global $html_icon,$mas_i;
-  $l = 0;
-  if (in_array($_COOKIE['ibbs']['ico'], $mas_i)) $select = "master";
-  foreach ($html_icon as $file=>$name) {
-	$arg[$l]['sel'] = "";
-	if ($_COOKIE['ibbs']['ico'] == $file || $select == $file){
-		$arg[$l]['sel'] = " selected";
+	global $font,$hr;
+	// ｸｯｷｰが無い場合は0番目にセット
+	$cookie=filter_input(INPUT_COOKIE,'ibbs',FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
+
+	if (!isset($cookie[$name])) $select = ${$name}[0];
+	foreach ($$name as $l=>$col) {
+	  if ((isset($cookie[$name]) ? $cookie[$name]:'') == $col || $select == $col){
+		  $arg[$l]['chk'] = " checked";
+	  } else{
+		  $arg[$l]['chk'] = "";
+	  }
+	  $arg[$l]['color'] = $col;
 	}
-    $arg[$l]['file'] = $file;
-    $arg[$l]['name'] = $name;
-    $l++;
+	return $arg;
   }
-  return $arg;
-}
-/*-- 全記事表示 --*/
+  /*-- アイコンHTML作成 --*/
+  function option_list($select="") {
+	global $html_icon,$mas_i;
+	$cookie=filter_input(INPUT_COOKIE,'ibbs',FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
+
+	$l = 0;
+	if (in_array($cookie['ico'], $mas_i)) $select = "master";
+	foreach ($html_icon as $file=>$name) {
+	  if ($cookie['ico'] == $file || $select == $file){
+		  $arg[$l]['sel'] = " selected";
+	  } else{
+		  $arg[$l]['sel'] = "";
+	  }
+	  $arg[$l]['file'] = $file;
+	  $arg[$l]['name'] = $name;
+	  $l++;
+	}
+	return $arg;
+  }
+  /*-- 全記事表示 --*/
 function all_view($page,$mode="") {
   global $html_icon,$font,$hr,$c;
 
@@ -246,11 +255,11 @@ function all_view($page,$mode="") {
   if (PAST) $arg['kako'] = true;
 
   // クッキー
-  $arg['cname'] = $_COOKIE['ibbs']['name'];
-  $arg['cemail'] = isset($_COOKIE['ibbs']['email'])? $_COOKIE['ibbs']['email'] :'';
-  $arg['cpass'] = $_COOKIE['ibbs']['pass'];
-  $arg['curl'] = isset($_COOKIE['ibbs']['url']) ? $_COOKIE['ibbs']['url']:'';
-
+  $cookie=filter_input(INPUT_COOKIE,'ibbs',FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
+  $arg['cname'] = isset($cookie['name']) ? $cookie['name'] :'';
+  $arg['cemail'] = isset($cookie['email']) ? $cookie['email'] :'';
+  $arg['cpass'] = isset($cookie['pass']) ? $cookie['pass'] :'';
+  $arg['curl'] = isset($cookie['url']) ? $cookie['url'] :'';
   if ($mode == "admin") {
     $arg['admin'] = true;
     $arg['title'] = "管理モード";
@@ -353,10 +362,12 @@ function res_view($num) {
   $arg['maxcom'] = MAXCOM;
   $arg['self'] = PHP_SELF;
   // クッキー
-  $arg['cname'] = $_COOKIE['ibbs']['name'];
-  $arg['cemail'] = $_COOKIE['ibbs']['email'];
-  $arg['cpass'] = $_COOKIE['ibbs']['pass'];
-  $arg['curl'] = $_COOKIE['ibbs']['url'];
+  $cookie=filter_input(INPUT_COOKIE,'ibbs',FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
+
+  $arg['cname'] = isset($cookie['name']) ? $cookie['name'] :'';
+  $arg['cemail'] = isset($cookie['email']) ? $cookie['email'] :'';
+  $arg['cpass'] = isset($cookie['pass']) ? $cookie['pass'] :'';
+  $arg['curl'] = isset($cookie['url']) ? $cookie['url'] :'';
 
   htmloutput(OTHERFILE,$arg);
 }
@@ -378,7 +389,7 @@ function check() {
   // 禁止ワード
   Reject_if_NGword_exists_in_the_post($_POST['comment'],$_POST['name'],$_POST['email'],$_POST['url'],$_POST['subject']);
   // 副題
-  if ($_POST['sex']) $_POST['subject'] = $_POST['sex']."/".$_POST['subject'];
+  if (filter_input(INPUT_POST,'sex')) $_POST['subject'] = $_POST['sex']."/".$_POST['subject'];
 
   // ランダムアイコン
   if ($_POST['ico']=="randam") {
@@ -402,6 +413,7 @@ function check() {
   }
   // 全$_POSTに適用
   $post  = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+ 
   // 無題
   if (trim($post['subject'])=="") $post['subject'] = "(無題)";
   // 改行処理
@@ -494,9 +506,10 @@ function log_write($post) {
   fclose($fp);
   // 重複カキ子チェック
   $num=0;
-  if($fline){
-	  list($num,$rname,$rcom,$rip,)  = explode("<>", $fline);
-	  if ($rname == $post['name'] && $rcom == $post['comment']) error("同じ内容は送信できません");
+//   if(!preg_match("/\A\s\z/i", $fline)){
+  if(strpos($fline,'<>')!==false){
+	list($num,$rname,$rcom,$rip,)  = explode("<>", $fline);
+	if ($rname == $post['name'] && $rcom == $post['comment']) error("同じ内容は送信できません");
   }
   // 新No.
   $newnum = $num+1;
@@ -513,7 +526,7 @@ function log_write($post) {
   setcookie("ibbs[hr]", $post['hr'], time()+14*86400);
   setcookie("ibbs[pass]", $post['delkey'], time()+14*86400);
   setcookie("ibbs[url]", $post['url'], time()+14*86400);
-
+ 
   if (NOTICE) {
     $mail_body = <<<EOL
 掲示板に投稿がありました。
@@ -852,13 +865,16 @@ function past_write($lines) {
 }
 /*-- ログ更新 --*/
 function update($lines) {
-  $fp = fopen(LOGFILE, "w");
-  set_file_buffer($fp, 0);
+  $fp = fopen(LOGFILE, "r+");
   flock($fp, LOCK_EX);
-  fputs($fp, implode('', $lines));
+  ftruncate($fp,0);
+  set_file_buffer($fp, 0);
+  rewind($fp);
+  fwrite($fp, implode('', $lines));
+  fflush($fp);            // 出力をフラッシュしてからロックを解放します
+  flock($fp, LOCK_UN);
   fclose($fp);
 }
-
 
 /*-- 自動リンク --*/
 function autolink($str) {
