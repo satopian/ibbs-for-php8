@@ -3,7 +3,7 @@
 ![image](https://user-images.githubusercontent.com/44894014/101713695-7cbde280-3adb-11eb-8a08-b3f862de96d3.png)
 
 ## ibbs php5.5-php8.0
-php7では動作しないphp4のPHP-I-BOARDをphp8.0でも動くようにしたものです。  
+PHP7では動作しないPHP4の掲示板、PHP-I-BOARDをphp8.0でも動くようにしたものです。  
 ### テンプレートエンジンをSkinny.phpに変更
 htmltemplate.inc v1.31も、php7では動作せず、POTI-board改のhtmltemplate.incでは記法があわず動作しないためテンプレートエンジンを[Skinny.php](http://skinny.sx68.net/)に変更しました。
 ### POTI-board改二のスパムフィルタ   
