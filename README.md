@@ -1,4 +1,4 @@
-# ibbs-for-php8
+# ibbs for php8
 
 ![image](https://user-images.githubusercontent.com/44894014/101713695-7cbde280-3adb-11eb-8a08-b3f862de96d3.png)
 
