@@ -5,7 +5,7 @@
 ## ibbs php5.5-php8.0
 php7では動作しないphp4のibbsをphp8.0でも動くようにしたものです。  
 ### テンプレートエンジンをSkinny.phpに変更
-htmltemplate.inc1.32も、php7では動作せず、POTI-board改のhtmltemplate.incも記法があわず動作しないためテンプレートエンジンを[Skinny.php](http://skinny.sx68.net/)に変更しました。
+htmltemplate.inc v1.31も、php7では動作せず、POTI-board改のhtmltemplate.incでは記法があわず動作しないためテンプレートエンジンを[Skinny.php](http://skinny.sx68.net/)に変更しました。
 ### POTI-board改二のスパムフィルタ   
 POTI-board改二と同じスパムフィルタを追加しています。  
 一度作成した掲示板用のスパムフィルタは容易に移植可能な事がわかりました。
