@@ -3,30 +3,8 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-A:link{    /* 未リンク */
-	text-decoration:none;
-}
-A:visited{ /* 既リンク */
-	text-decoration:none;
-}
-A:hover  { /* リンク中 */
-	color:#F44646; text-decoration:underline;
-}
-BODY,TD,TH{/* 基本フォント&基本サイズ */
-	font-family:"ＭＳ Ｐゴシック"; font-size:10pt;
-}
-input,textarea,select{
-font-family     :ＭＳ ゴシック;   /*文字フォント*/
-font-size       :10pt;            /* 文字サイズ */
-color           :#349B31;         /*   文字色   */
-background-color:#FFFFFF;         /*   背景色   */
-border          :1 solid #749FF1; /*線の太さ、色*/
-}
-input{
-font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
-}
-</style>
+		<link rel="stylesheet" href="style_main.css">
+
 
 <title>PHP-I=BOARD<% def(num)%> [<% echo(num)%> RES]<% /def %></title></head>
 <body text=#585858 link=#5C50CD vlink=#399563 bgcolor=#FFFFFF>
@@ -37,64 +15,83 @@ font-family     :ＭＳ Ｐゴシック; /*文字フォント*/
 
 <% def(res_mode)%>
 <!--レス一覧 開始-->
-<br><center>
-<table width="80%" bgcolor="#FFFFFF" border=1 bordercolor="<% echo(b_color)%>"><tr><td>
-<table width="100%" border="0">
-<tr><th bgcolor="<% echo(b_color)%>" colspan="3"><font color="#ffffff">[<% echo(num)%>] <% echo(subj)%></font></th></tr>
-<tr><td colspan=3>□投稿者/ <% echo(name)%> <% def(email)%> <a href="mailto:<% echo(email)%>">＠</a><% /def %>-<small>(<% echo(date)%>)</small><% def(url)%> <a href="<% echo(url)%>" target=_top><img src="./Icon/home2.gif" width=15 height=15 border=0></a><% /def %></td></tr>
-<tr><td width=10%><% def(oyaicon)%><img src="<% echo(oyaicon)%>" align=middle><% /def %><br>[<a href="<% echo(self)%>?num=<% echo(num)%>&mode=res&q=<% echo(num)%>#F">引用</a>]</td>
-<td width=90%><br><font color="<% echo(color)%>"><% echo(com)%></font></td></tr>
-</table><br>
-<% def(res)%>
-<hr size=1 color=<% echo(b_color)%>>
-<table width=100%><tr><td width=10%><br></td><td width=90%><table width=100%>
+<div class="mainc">
+<br>
+<div class="oya_eh" style="border-color:<% echo(b_color)%>;">
+		<h2 style="background-color:<% echo(b_color)%>;">[<% echo(num) %>] <% echo(subj)%></h2>
+		<h3><a href="#list">■</a> <% echo(name) %><% def(email) %> <a href="mailto:<% echo(email)%>">＠</a><% /def %>-<small>(<% echo(date) %>)</small><% def(url) %> <a href="<% echo(url) %>" target=_top><img src="./Icon/home2.gif"></a><% /def %></h3>
+		<div class="oya_message">
+			<div class="ico">
+				<p><% def(icon)%><img src="<% echo(oyaicon)%>" alt=""><% /def %></p>
+			</div>
+			<div class="com">
+				<span style="color:<% echo(color)%>;"><% echo(com)%></span>
+			</div>
+		</div>
+		
 
-<% each(res)%>
-<tr><th colspan=2 bgcolor=<% echo(res/b_color)%>><font color=#ffffff>[<% echo(res/num)%>] <% echo(res/subj)%></font></th></tr>
-<tr><td colspan=3>□投稿者/ <% echo(res/name)%> <% def(res/email)%> <a href="mailto:<% echo(res/email)%>">＠</a><% /def %>-<small>(<% echo(res/date)%>)</small><% def(res/url)%> <a href="<% echo(res/url)%>" target=_top><img src="./Icon/home2.gif" width=15 height=15 border=0></a><% /def %></td></tr>
-<tr><td valign=top width=10%><% def(res/icon)%><img src="<% echo(res/icon)%>" align=middle><br><% /def %>Res<% echo(res/cnt)%><br>[<a href="<% echo(self)%>?num=<% echo(num)%>&mode=res&q=<% echo(res/num)%>#F">引用</a>]</td>
-<td width=90%><br><font color="<% echo(res/color)%>"><% echo(res/com)%><br></font><br></td></tr>
-<% /each %>
+<% def(res) %>
+<div class="oya_res" style="border-color:<% echo(b_color)%>;">
+
+
+	<% each(res) %>
+	<!-- <section> -->
+		<h3 style="background-color:<% echo(res/b_color)%>;">[<% echo(res/num) %>] <% echo(res/subj)%></h3>
+		<h4>□ <% echo(res/name)%><% def(res/email)%> <a href="mailto:<% echo(res/email)%>">＠</a><% /def %>-<small>(<% echo(res/date)%><% def(res/url)%>) <a href="<% echo(res/url)%>" target=_top><img src="./Icon/home2.gif" width="15" height="15" alt="[home]"></a><% /def %> Res<% echo(res/cnt)%></small></h4>
+		<div class="res_message">
+			<div class="ico">
+				<p><% def(res/icon)%><img src="<% echo(res/icon)%>"><% /def %></p>
+			</div>
+			<div class="com">
+				<span style="color:<% echo(res/color)%>;"><% echo(res/com)%></span>
+			</div>
+		</div>
+	<!-- </section> -->
+	<% /each %>
+</div>
+
+
 </table></td></tr></table>
 <% /def %>
 <div align=right>
 <a href="<% echo(self)%>?mode=res&num=<% echo(num)%>&res=old">先頭から<% echo(res_def)%>件</a> /
 <a href="<% echo(self)%>?mode=res&num=<% echo(num)%>&res=new">最新レス<% echo(res_def)%>件</a> /
 <a href="<% echo(self)%>?mode=res&num=<% echo(num)%>&res=all">全レス表示</a></div>
-</td></tr></table></center>
-<a name=F></a><center>
-<form action=<% echo(self)%> method=POST>
-<input type=hidden name=no value=0>
-<input type=hidden name=type value="<% echo(num)%>">
-<input type=hidden name=page value=0>
-<input type=hidden name=mode value=write>
-<table>
-<tr><th colspan=6>△[<% echo(num)%>] <% echo(subj)%> へ返信</th></tr><tr>
-<td>Name</td><td>/<input type=text name="name" value="<% echo(cname)%>" size=20 maxlength=32 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';" autocomplete="username"></td>
-<td>E-Mail</td><td>/<input type="email" name="email" value="<% echo(cemail)%>" size=20 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
-<td>削除キー</td><td>/<input type=password maxlength=8 name="delkey" size=8 value="<% echo(cpass)%>" onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';" autocomplete="current-password">
-</td></tr><tr>
-<td>Title</td><td>/<input type=text name="subject" size=20 value="<% echo(rsubj)%>" onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';" maxlength=32></td>
-<td>URL</td><td colspan=3>/<input type="url" name="url" value="<% echo(curl)%>" size=50 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
-</tr>
-<tr><td colspan=6>Comment/半角<% echo(maxcom)%>文字以内<br>
-　<textarea name="comment" rows=8 cols=65 wrap=soft onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"><% echo(rcom)%></textarea></td></tr>
-<tr><td>文字色</td><td colspan=5>/
-<% each(font)%>
-<input type=radio name=font value="<% echo(font/color)%>"<% echo(font/chk)%>><font color=<% echo(font/color)%>>■</font>
-<% /each %>
-</td></tr><tr><td>枠線色</td><td colspan=3>/
-<% each(hr)%>
-<input type=radio name=hr value="<% echo(hr/color)%>"<% echo(hr/chk)%>><font color=<% echo(hr/color)%>>■</font>
-<% /each %>
-</td></tr><tr><td>Icon</td><td colspan=2>/<select name=ico>
-<% each(icon)%>
-<option value="<% echo(icon/file)%>"<% echo(icon/sel)%>><% echo(icon/name)%></option>
-<% /each %>
-</select></td>
-<td colspan=4 align=right><input type=submit value=" レス " onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';">
-<input type=reset value="リセット" onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></td></tr></table></center></form>
-<!--レス一覧 終了-->
+</td></tr></table>
+<a name=F></a>
+</div>
+<form action=<% echo(self)%> method="POST" class="post">
+	<input type=hidden name=no value=0>
+	<input type=hidden name=type value="<% echo(num)%>">
+	<input type=hidden name=page value=0>
+	<input type=hidden name=mode value=write>
+	<table>
+	<tr><div class="res_num_subj">△[<% echo(num)%>] <% echo(subj)%> へ返信</div></tr><tr>
+	<td>Name</td><td>/<input type=text name="name" value="<% echo(cname)%>" size=20 maxlength=32 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';" autocomplete="username"></td>
+	<td>E-Mail</td><td>/<input type="email" name="email" value="<% echo(cemail)%>" size=20 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
+	<td>削除キー</td><td>/<input type=password maxlength=8 name="delkey" size=8 value="<% echo(cpass)%>" onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';" autocomplete="current-password">
+	</td></tr><tr>
+	<td>Title</td><td>/<input type=text name="subject" size=20 value="<% echo(rsubj)%>" onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';" maxlength=32></td>
+	<td>URL</td><td colspan=3>/<input type="url" name="url" value="<% echo(curl)%>" size=50 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
+	</tr>
+	<tr><td colspan=6>Comment/半角<% echo(maxcom)%>文字以内<br>
+	　<textarea name="comment" rows=8 cols=65 wrap=soft onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"><% echo(rcom)%></textarea></td></tr>
+	<tr><td>文字色</td><td colspan=5>/
+	<% each(font)%>
+	<input type=radio name=font value="<% echo(font/color)%>"<% echo(font/chk)%>><font color=<% echo(font/color)%>>■</font>
+	<% /each %>
+	</td></tr><tr><td>枠線色</td><td colspan=3>/
+	<% each(hr)%>
+	<input type=radio name=hr value="<% echo(hr/color)%>"<% echo(hr/chk)%>><font color=<% echo(hr/color)%>>■</font>
+	<% /each %>
+	</td></tr><tr><td>Icon</td><td colspan=2>/<select name=ico>
+	<% each(icon)%>
+	<option value="<% echo(icon/file)%>"<% echo(icon/sel)%>><% echo(icon/name)%></option>
+	<% /each %>
+	</select></td>
+	<td colspan=4 align=right><input type=submit value=" レス " onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+	<input type=reset value="リセット" onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></td></tr></table></center></form>
+	<!--レス一覧 終了-->
 <% /def %>
 
 <% def(edit_mode)%>
@@ -343,7 +340,8 @@ Page : <% echo(paging)%>
 </center>
 <% /def %>	
 <!--著作権表示 削除しないでください-->
-<hr width=90%><center>- <a href="http://php.loglog.jp/" target=_top>レッツPHP!</a> & <a href="https://pbbs.sakura.ne.jp/" target="_top">@satopian</a> -</center>
+<hr>
+<div class="copyr rescopyr">- <a href="http://php.loglog.jp/" target=_top>レッツPHP!</a> & <a href="https://pbbs.sakura.ne.jp/" target="_top">@satopian</a> -</div>
 <!--フッタ広告タグ挿入位置▽-->
 
 <!--△ここまで-->

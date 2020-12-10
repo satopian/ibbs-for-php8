@@ -52,6 +52,7 @@ input {
     padding: 1em;
     border-top: 1px solid #555555;
     border-bottom: 1px solid #555555;
+    font-weight: normal;
 }
 .mainc table {
     border-width: 0px;
@@ -66,23 +67,22 @@ input {
 .mainc nav ul {
     display: flex;
     justify-content: center;
-    list-style-type: square;
+    list-style-type: none;
 }
 .mainc nav ul li {
     margin-left: 30px;
     margin-right: 30px;
 }
 .post table {
-    width: 50%;
     margin-left: auto;
     margin-right: auto;
     background-color: #FFFFFF;
 }
-.post table td:nth-child(2n-1) {
+.postmain.post table td:nth-child(2n-1) {
     background-color: #749FF1;
 }
 #list {
-    width: 72%;
+    width: 81%;
     margin-left: auto;
     margin-right: auto;
     border-style: double;
@@ -96,7 +96,7 @@ input {
     width: 80%;
 }
 .oya_eh {
-    width: 71%;
+    width: 80%;
     margin-left: auto;
     margin-right: auto;
     background-color: #FFFFFF;
@@ -116,16 +116,24 @@ input {
 .oya_eh > h3 {
     padding-top: 0.2ex;
     padding-bottom: 0.2ex;
-    margin-top: 0.2ex;
+	margin-top: 0.2ex;
+	font-weight: normal;
+	font-size: small;
 }
-.oya_eh > section {
+div.oya_message {
     display: flex;
 }
-.oya_eh > section div:first-child {
-    width: 15%;
-    text-align: center;
+div.ico {
+	width: 56px;
+	text-align: center;
+	margin: 0 10px 0 0px;
 }
-.oya_eh form {
+div.com{
+	margin: 23px 0;
+	line-height: 1.5em;
+	letter-spacing: 0.08em;
+}
+.oya_eh .res_button {
     text-align: right;
 }
 .oya_eh div.oya_res {
@@ -134,21 +142,25 @@ input {
 }
 .oya_eh .oya_res h3 {
     text-align: center;
-    color: #5B5B5B;
-    margin-bottom: 0px;
+    color: #FFFFFF;
+	margin-bottom: 0px;
+	font-size: small;
+	
 }
 .oya_eh .oya_res h4 {
     padding: 0px;
-    margin: 0px;
+	margin: 0px;
+	font-weight: normal;
+	font-size: small;
 }
-.oya_eh div.oya_res section > div {
+div.res_message {
     padding-top: 1ex;
     display: flex;
 }
-.oya_eh div.oya_res section > div > div:first-child {
+/* .oya_eh div.oya_res section > div > div:first-child {
     width: 15%;
     text-align: center;
-}
+} */
 .oya_over {
     text-align: right;
 }
@@ -178,10 +190,16 @@ input {
 form h3 {
     background-color: #749FF1;
     margin-bottom: 0.2ex;
+    font-size: small;
 }
 form.edit {
-    float: left;
-    padding-bottom: 1em;
+    display: table;
+    margin: 0 auto;
+}
+.res_num_subj{
+	text-align: center;
+	font-weight: 600;
+	margin: 10px 0;
 }
 .foot {
     clear: both;
@@ -197,4 +215,7 @@ form.edit {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+}
+.rescopyr {
+	margin: 10px 0;
 }

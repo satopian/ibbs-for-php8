@@ -18,16 +18,17 @@
 			<hr>
 			<nav>
 				<ul>
-					<li><a href="<% echo(home_url)%>">HOME</a></li>
-					<li><a href="<% echo(self) %>?mode=man">HELP</a></li>
-					<li><a href="<% echo(self) %>?mode=s">SEARCH</a></li>
-					<!--{def kako}--><li><a href="<% echo(self) %>?mode=log">過去ログ</a></li><!--{/def}-->
+					<li>□<a href="<% echo(home_url)%>">HOME</a></li>
+					<li>□<a href="<% echo(self) %>?mode=man">HELP</a></li>
+					<li>□<a href="<% echo(self) %>?mode=s">SEARCH</a></li>
+					<% def(kako)%><li>□<a href="<% echo(self) %>?mode=log">過去ログ</a></li>
+				<% /def %>
 				</ul>
 			</nav>
 			<h2>・どんどん書いていってね！</h2>
 		</div>
 
-		<form action="<% echo(self) %>" method="POST" class="post">
+		<form action="<% echo(self) %>" method="POST" class="post postmain">
 			<input type="hidden" name="mode" value="write">
 			<input type="hidden" name="type" value="0">
 			<table>
@@ -86,36 +87,36 @@
 		<div class="oya_eh" style="border-color:<% echo(oya/b_color) %>;">
 			<h2 style="background-color:<% echo(oya/b_color)%>;">[<% echo(oya/num) %>] <% echo(oya/subj)%></h2>
 			<h3><a href="#list">■</a> <% echo(oya/name) %><% def(oya/email) %> <a href="mailto:<% echo(oya/email)%>">＠</a><% /def %>-<small>(<% echo(oya/date) %>)</small><% def(oya/url) %> <a href="<% echo(oya/url) %>" target=_top><img src="./Icon/home2.gif"></a><% /def %></h3>
-			<section>
+			<div class="oya_message">
 				<div class="ico">
 					<p><% def(oya/icon)%><img src="<% echo(oya/icon)%>" alt=""><% /def %></p>
 					<p>[<a href="<% echo(self) %>?num=<% echo(oya/num)%>&mode=res&q=<% echo(oya/num)%>#F">引用</a>]</p>
 				</div>
-				<div>
+				<div class="com">
 					<span style="color:<% echo(oya/color)%>;"><% echo(oya/com)%></span>
 				</div>
-			</section>
-			<form action="<% echo(self) %>" method="GET">
+			</div>
+			<form action="<% echo(self) %>" method="GET" class="res_button">
 				<input type="hidden" name="num" value="<% echo(oya/num)%>">
 				<input type="hidden" name="mode" value="res">
 				<input type="submit" value=" レスする " onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';">
 			</form>
 			<% def(oya/res) %>
-			<div class="oya_res" style="border-color:<% echooya/b_color)%>;">
+			<div class="oya_res" style="border-color:<% echo (oya/b_color)%>;">
 				<% each(oya/res) %>
-				<section>
+				<!-- <section> -->
 					<h3 style="background-color:<% echo(oya/res/b_color)%>;">[<% echo(oya/res/num) %>] <% echo(oya/res/subj)%></h3>
 					<h4>□ <% echo(oya/res/name)%><% def(oya/res/email)%> <a href="mailto:<% echo(oya/res/email)%>">＠</a><% /def %>-<small>(<% echo(oya/res/date)%><% def(oya/res/url)%>) <a href="<% echo(oya/res/url)%>" target=_top><img src="./Icon/home2.gif" width="15" height="15" alt="[home]"></a><% /def %> Res<% echo(oya/res/cnt)%></small></h4>
-					<div>
+					<div class="res_message">
 						<div class="ico">
 							<p><% def(oya/res/icon)%><img src="<% echo(oya/res/icon)%>"><% /def %></p>
 							<p>[<a href="<% echo(self) %>?num=<% echo(oya/num)%>&mode=res&q=<% echo(oya/res/num)%>#F">引用</a>]</p>
 						</div>
-						<div>
+						<div class="com">
 							<span style="color:<% echo(oya/res/color)%>;"><% echo(oya/res/com)%></span>
 						</div>
 					</div>
-				</section>
+				<!-- </section> -->
 				<% /each %>
 			</div>
 			<% /def %>
@@ -150,6 +151,7 @@
 			</form>
 		</div>
 
+		<div class="editform">
 		<form action="<% echo(self) %>" method="POST" class="edit">
 			<h3>編集/削除フォーム</h3>
 			<input type="hidden" name="no" value="0">
@@ -161,6 +163,7 @@
 			削除キー / <input type="password" name="delkey" value="<% echo(cpass)%>" size="8" onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';" autocomplete="current-password">
 			<input type="submit" value=" 送信 " onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';">
 		</form>
+		</div>
 	</div>
 
 	<div class="foot">
