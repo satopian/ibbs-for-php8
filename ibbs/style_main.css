@@ -21,8 +21,7 @@ body {
 }
 body > div {
     width: 90%;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
 }
 input, textarea, select {
     font-family:"ＭＳ ゴシック";     /*文字フォント*/
@@ -35,8 +34,7 @@ input {
     font-family:"ＭＳ Ｐゴシック";   /*文字フォント*/
 }
 .mainc {
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
 }
 .mainc h1 {
     color: #749FF1;
@@ -55,7 +53,7 @@ input {
     font-weight: normal;
 }
 .mainc table {
-    border-width: 0px;
+    border-width: 0;
 }
 .mainc table td {
     background-color: #FFFFFF;
@@ -82,27 +80,25 @@ input {
     background-color: #749FF1;
 }
 #list {
-    width: 81%;
-    margin-left: auto;
-    margin-right: auto;
+    width: 91%;
     border-style: double;
     border-width: 4px;
     border-color: #749FF1;
+    margin: 1em auto;
 }
 #list td {
     background-color: #FFFFFF;
 }
 .hrbr {
-    width: 80%;
+    width: 91%;
 }
 .oya_eh {
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 90%;
     background-color: #FFFFFF;
     border-width: 4px;
     border-style: double;
-    padding: 8px 2px;
+    padding: 3px 2px 8px;
+    margin: 1em auto;
 }
 .oya_eh > h2 {
     width: auto;
@@ -110,16 +106,18 @@ input {
     color: #FFFFFF;
     padding-top: 0.2ex;
     padding-bottom: 0.2ex;
-    margin-top: 0.2ex;
-    margin-bottom: 0px;
+    margin-top: 0;
+    margin-bottom: 0;
     padding: 2px;
+    border: none;
+    font-weight: 600;
 }
 .oya_eh > h3 {
-    padding-top: 0.2ex;
+    padding-top: 5px;
     padding-bottom: 0.2ex;
-	margin-top: 0.2ex;
-	font-weight: normal;
-	font-size: small;
+    margin-top: 0.2ex;
+    font-weight: normal;
+    font-size: small;
 }
 div.oya_message {
     display: flex;
@@ -130,7 +128,7 @@ width: 5%;
 div.ico {
 	width: 10%;
 	/* text-align: center; */
-	margin: 0 10px 0 0px;
+	margin: 0 10px 0 0;
 }
 div.com{
 	margin: 13px 0;
@@ -143,21 +141,21 @@ div.com{
     text-align: right;
 }
 .oya_eh div.oya_res {
-    border-width: 1px 0px 0px 0px;
+    border-width: 1px 0 0 0;
     padding-left: 13%;
 }
 .oya_eh .oya_res h3 {
     text-align: center;
     color: #FFFFFF;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     font-size: small;
     padding: 2px;
 }
 .oya_eh .oya_res h4 {
-    padding: 0px;
-	margin: 0px;
-	font-weight: normal;
-	font-size: small;
+    padding-top: 5px;
+    margin: 0;
+    font-weight: normal;
+    font-size: small;
 }
 div.res_message {
     padding-top: 1ex;
@@ -175,7 +173,7 @@ div.res_message {
     margin-left: auto;
     margin-right: auto;
     margin-top: 1em;
-    border-width: 1px 0px 0px 0px;
+    border-width: 1px 0 0 0;
     border-style: solid;
     border-color: #555555;
     text-align: center;
@@ -212,7 +210,7 @@ form.edit {
     width: 90%;
     margin: 1em auto 1em auto;
     padding: 1em;
-    border-width: 1px 0px 1px 0px;
+    border-width: 1px 0 1px 0;
     border-color: #5B5B5B;
     border-style: solid;
     text-align: right;
