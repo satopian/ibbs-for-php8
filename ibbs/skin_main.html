@@ -88,9 +88,10 @@
 			<h2 style="background-color:<% echo(oya/b_color)%>;">[<% echo(oya/num) %>] <% echo(oya/subj)%></h2>
 			<h3><a href="#list">■</a> <% echo(oya/name) %><% def(oya/email) %> <a href="mailto:<% echo(oya/email)%>">＠</a><% /def %>-<small>(<% echo(oya/date) %>)</small><% def(oya/url) %> <a href="<% echo(oya/url) %>" target=_top><img src="./Icon/home2.gif"></a><% /def %></h3>
 			<div class="oya_message">
-				<div class="ico">
-					<p><% def(oya/icon)%><img src="<% echo(oya/icon)%>" alt=""><% /def %></p>
-					<p>[<a href="<% echo(self) %>?num=<% echo(oya/num)%>&mode=res&q=<% echo(oya/num)%>#F">引用</a>]</p>
+				<div class="oya_ico_yohaku"></div><div class="ico">
+					<% def(oya/icon)%><img src="<% echo(oya/icon)%>" alt=""><% /def %>
+					<br>
+					[<a href="<% echo(self) %>?num=<% echo(oya/num)%>&mode=res&q=<% echo(oya/num)%>#F">引用</a>]
 				</div>
 				<div class="com">
 					<span style="color:<% echo(oya/color)%>;"><% echo(oya/com)%></span>
@@ -104,19 +105,18 @@
 			<% def(oya/res) %>
 			<div class="oya_res" style="border-color:<% echo (oya/b_color)%>;">
 				<% each(oya/res) %>
-				<!-- <section> -->
 					<h3 style="background-color:<% echo(oya/res/b_color)%>;">[<% echo(oya/res/num) %>] <% echo(oya/res/subj)%></h3>
 					<h4>□ <% echo(oya/res/name)%><% def(oya/res/email)%> <a href="mailto:<% echo(oya/res/email)%>">＠</a><% /def %>-<small>(<% echo(oya/res/date)%><% def(oya/res/url)%>) <a href="<% echo(oya/res/url)%>" target=_top><img src="./Icon/home2.gif" width="15" height="15" alt="[home]"></a><% /def %> Res<% echo(oya/res/cnt)%></small></h4>
 					<div class="res_message">
 						<div class="ico">
-							<p><% def(oya/res/icon)%><img src="<% echo(oya/res/icon)%>"><% /def %></p>
-							<p>[<a href="<% echo(self) %>?num=<% echo(oya/num)%>&mode=res&q=<% echo(oya/res/num)%>#F">引用</a>]</p>
+							<% def(oya/res/icon)%><img src="<% echo(oya/res/icon)%>"><% /def %>
+							<br>
+							[<a href="<% echo(self) %>?num=<% echo(oya/num)%>&mode=res&q=<% echo(oya/res/num)%>#F">引用</a>]
 						</div>
 						<div class="com">
 							<span style="color:<% echo(oya/res/color)%>;"><% echo(oya/res/com)%></span>
 						</div>
 					</div>
-				<!-- </section> -->
 				<% /each %>
 			</div>
 			<% /def %>

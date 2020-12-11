@@ -21,8 +21,9 @@
 		<h2 style="background-color:<% echo(b_color)%>;">[<% echo(num) %>] <% echo(subj)%></h2>
 		<h3><a href="#list">■</a> <% echo(name) %><% def(email) %> <a href="mailto:<% echo(email)%>">＠</a><% /def %>-<small>(<% echo(date) %>)</small><% def(url) %> <a href="<% echo(url) %>" target=_top><img src="./Icon/home2.gif"></a><% /def %></h3>
 		<div class="oya_message">
-			<div class="ico">
-				<p><% def(icon)%><img src="<% echo(oyaicon)%>" alt=""><% /def %></p>
+			<div class="oya_ico_yohaku"></div><div class="ico">
+				<% def(icon)%><img src="<% echo(oyaicon)%>" alt=""><% /def %>
+				<br>[<a href="<% echo(self)%>?num=<% echo(num)%>&mode=res&q=<% echo(num)%>#F">引用</a>]
 			</div>
 			<div class="com">
 				<span style="color:<% echo(color)%>;"><% echo(com)%></span>
@@ -35,18 +36,19 @@
 
 
 	<% each(res) %>
-	<!-- <section> -->
 		<h3 style="background-color:<% echo(res/b_color)%>;">[<% echo(res/num) %>] <% echo(res/subj)%></h3>
 		<h4>□ <% echo(res/name)%><% def(res/email)%> <a href="mailto:<% echo(res/email)%>">＠</a><% /def %>-<small>(<% echo(res/date)%><% def(res/url)%>) <a href="<% echo(res/url)%>" target=_top><img src="./Icon/home2.gif" width="15" height="15" alt="[home]"></a><% /def %> Res<% echo(res/cnt)%></small></h4>
 		<div class="res_message">
 			<div class="ico">
-				<p><% def(res/icon)%><img src="<% echo(res/icon)%>"><% /def %></p>
+				<% def(res/icon)%><img src="<% echo(res/icon)%>">
+				Res<% echo(res/cnt)%><br>[<a href="<% echo(self)%>?num=<% echo(num)%>&mode=res&q=<% echo(res/num)%>#F">引用</a>]
+				<% /def %>
+
 			</div>
 			<div class="com">
 				<span style="color:<% echo(res/color)%>;"><% echo(res/com)%></span>
 			</div>
 		</div>
-	<!-- </section> -->
 	<% /each %>
 </div>
 
@@ -316,7 +318,7 @@ Page : <% echo(paging)%>
 
 <td bgcolor=#749FF1>削除キー</td>
 <td>/<input type=password name=delkey value="<% echo(cpass)%>" size=8 onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';">
-<small>(半角8文字以内)</small></td></tr>
+<small>(半角英数)</small></td></tr>
 <tr><td colspan=4 bgcolor=#749FF1>Comment/ <small>(適当に改行を入れて下さい/半角<% echo(maxcom)%>文字以内)</small><br>
 　<textarea name=comment rows=8 cols=70 wrap=soft onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></textarea></td></tr>
 

@@ -102,7 +102,7 @@ input {
     background-color: #FFFFFF;
     border-width: 4px;
     border-style: double;
-    padding: 2px;
+    padding: 8px 2px;
 }
 .oya_eh > h2 {
     width: auto;
@@ -112,6 +112,7 @@ input {
     padding-bottom: 0.2ex;
     margin-top: 0.2ex;
     margin-bottom: 0px;
+    padding: 2px;
 }
 .oya_eh > h3 {
     padding-top: 0.2ex;
@@ -123,15 +124,20 @@ input {
 div.oya_message {
     display: flex;
 }
+div.oya_ico_yohaku {
+width: 5%;
+}
 div.ico {
-	width: 56px;
-	text-align: center;
+	width: 10%;
+	/* text-align: center; */
 	margin: 0 10px 0 0px;
 }
 div.com{
-	margin: 23px 0;
+	margin: 13px 0;
 	line-height: 1.5em;
 	letter-spacing: 0.08em;
+	width: 90%;
+	margin: 13px auto;
 }
 .oya_eh .res_button {
     text-align: right;
@@ -143,9 +149,9 @@ div.com{
 .oya_eh .oya_res h3 {
     text-align: center;
     color: #FFFFFF;
-	margin-bottom: 0px;
-	font-size: small;
-	
+    margin-bottom: 0px;
+    font-size: small;
+    padding: 2px;
 }
 .oya_eh .oya_res h4 {
     padding: 0px;
