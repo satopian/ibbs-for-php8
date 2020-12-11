@@ -62,69 +62,102 @@
 </td></tr></table>
 <a name=F></a>
 </div>
-<form action=<% echo(self)%> method="POST" class="post">
-	<input type=hidden name=no value=0>
-	<input type=hidden name=type value="<% echo(num)%>">
-	<input type=hidden name=page value=0>
-	<input type=hidden name=mode value=write>
+<form action="<% echo(self) %>" method="POST" class="post">
+	<input type="hidden" name="no" value="0">
+	<input type="hidden" name="type" value="<% echo(num)%>">
+	<input type="hidden" name="page" value="0">
+	<input type="hidden" name="mode" value="write">
+	<div class="res_num_subj">△[<% echo(num)%>] <% echo(subj)%> へ返信</div>
 	<table>
-	<tr><div class="res_num_subj">△[<% echo(num)%>] <% echo(subj)%> へ返信</div></tr><tr>
-	<td>Name</td><td>/<input type=text name="name" value="<% echo(cname)%>" size=20 maxlength=32 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';" autocomplete="username"></td>
-	<td>E-Mail</td><td>/<input type="email" name="email" value="<% echo(cemail)%>" size=20 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
-	<td>削除キー</td><td>/<input type=password maxlength=8 name="delkey" size=8 value="<% echo(cpass)%>" onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';" autocomplete="current-password">
-	</td></tr><tr>
-	<td>Title</td><td>/<input type=text name="subject" size=20 value="<% echo(rsubj)%>" onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';" maxlength=32></td>
-	<td>URL</td><td colspan=3>/<input type="url" name="url" value="<% echo(curl)%>" size=50 onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td></tr>
-	</tr>
-	<tr><td colspan=6>Comment/半角<% echo(maxcom)%>文字以内<br>
-	　<textarea name="comment" rows=8 cols=65 wrap=soft onFocus="this.style.backgroundColor='#FEF1C0';" onBlur="this.style.backgroundColor='#FFFFFF';"><% echo(rcom)%></textarea></td></tr>
-	<tr><td>文字色</td><td colspan=5>/
-	<% each(font)%>
-	<input type=radio name=font value="<% echo(font/color)%>"<% echo(font/chk)%>><font color=<% echo(font/color)%>>■</font>
-	<% /each %>
-	</td></tr><tr><td>枠線色</td><td colspan=3>/
-	<% each(hr)%>
-	<input type=radio name=hr value="<% echo(hr/color)%>"<% echo(hr/chk)%>><font color=<% echo(hr/color)%>>■</font>
-	<% /each %>
-	</td></tr><tr><td>Icon</td><td colspan=2>/<select name=ico>
-	<% each(icon)%>
-	<option value="<% echo(icon/file)%>"<% echo(icon/sel)%>><% echo(icon/name)%></option>
-	<% /each %>
-	</select></td>
-	<td colspan=4 align=right><input type=submit value=" レス " onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';">
-	<input type=reset value="リセット" onmouseover="this.style.backgroundColor='#FEF1C0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></td></tr></table></center></form>
-	<!--レス一覧 終了-->
+		<tr>
+			<td>Name</td>
+			<td>/<input type="text" name="name" value="<% echo(cname) %>" size="25" maxlength="32" onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';" autocomplete="username"></td>
+			<td>E-Mail</td>
+			<td>/<input type="email" name="email" value="<% echo(cemail) %>" size="25" onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
+		</tr>
+		<tr>
+			<td>Title</td>
+			<td>/<input type="text" name="subject" size="25" onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';" maxlength="32"></td>
+			<td>削除キー</td>
+			<td>/<input type="password" name="delkey" value="<% echo(cpass)%>" size="8" onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';" autocomplete="current-password">
+			<small>(半角英数)</small></td>
+		</tr>
+		<tr>
+			<td colspan="4">Comment/ <small>(適当に改行を入れて下さい/半角<% echo(maxcom)%>文字以内)</small><br>
+			<textarea name="comment" rows="8" cols="70" wrap="soft" onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></textarea></td>
+		</tr>
+		<tr>
+			<td>URL</td>
+			<td colspan="3">/<input type="url" name="url" value="<% echo(curl)%>" size="65" onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
+		</tr>
+		<tr>
+			<td>文字色</td>
+			<td colspan="3">/<% each(font)%><input type="radio" name="font" value="<% echo(font/color) %>"<% echo(font/chk)%>><span style="color:<% echo(font/color) %>">■</span><% /each %></td>
+		</tr>
+		<tr>
+			<td>枠線色</td>
+			<td colspan="3">/<% each(hr)%><input type="radio" name="hr" value="<% echo(hr/color) %>"<% echo(hr/chk) %>><span style="color:<% echo(hr/color) %>">■</span><% /each %></td>
+		</tr>
+		<tr>
+			<td>Icon</td>
+			<td colspan="2">/
+				<select name="ico">
+					<% each(icon)%><option value="<% echo(icon/file) %>"<% echo(icon/sel)%>><% echo(icon/name)%></option><% /each %>
+				</select><small>(画像を選択/<a href="<% echo(self) %>?mode=img" target="_blank">サンプル一覧</a>)</small>
+			</td>
+			<td><input type="submit" value="送 信" onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+		<input type=reset value="リセット" onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></td>
+		</tr>
+	</table>
+</form>
+<!--レス一覧 終了-->
 <% /def %>
 
 <% def(edit_mode)%>
 <!--編集モード 開始-->
-<blockquote><form action="<% echo(self)%>" method="POST">
-<input type=hidden name=delkey value="<% echo(pass)%>">
-<input type=hidden name=mode value=rewrite>
-<input type=hidden name=num value=<% echo(num)%>>
-<table bgcolor=#FFFFFF align=center>
-<tr><td>Name</td><td>/<input type=text name="name" value="<% echo(name)%>" size=35></td></tr>
-<tr><td>E-Mail</td><td>/<input type=text name="email" value="<% echo(email)%>" size=35></td></tr>
-
-<tr><td>Title</td><td>/<input type=text name="subject" size=35 value="<% echo(subj)%>"></td></tr>
-<tr><td>URL</td><td>/<input type=text name="url" value="http://<% echo(url)%>" size=60></td></tr>
-<tr><td colspan=2>Comment▽ <small>(適当に改行を入れて下さい)</small><br>
-　<textarea name="comment" rows=12 cols=70 wrap=soft><% echo(com)%></textarea></td></tr>
-<tr><td>文字色</td><td colspan=5>/
-<% each(font)%>
-<input type=radio name=font value="<% echo(font/color)%>"<% echo(font/chk)%>><font color=<% echo(font/color)%>>■</font>
-<% /each %>
-</td></tr><tr><td>枠線色</td><td colspan=3>/
-<% each(hr)%>
-<input type=radio name=hr value="<% echo(hr/color)%>"<% echo(hr/chk)%>><font color=<% echo(hr/color)%>>■</font>
-<% /each %>
-</td></tr><tr><td>Icon</td><td colspan=2>/<select name=ico>
-<% each(icon)%>
-<option value="<% echo(icon/file)%>"<% echo(icon/sel)%>><% echo(icon/name)%></option>
-<% /each %>
-</select><small>(<a href='<% echo(self)%>?mode=img' target=_blank>サンプル一覧</a>)</small></td><td>
-</td></tr><tr><td colspan=2 align=right><input type=submit value=" 編 集 ">
-<input type=reset value=リセット></td></tr></table></form></blockquote>
+<form action="<% echo(self) %>" method="POST" class="post">
+	<input type=hidden name=delkey value="<% echo(pass)%>">
+	<input type=hidden name=mode value=rewrite>
+	<input type=hidden name=num value=<% echo(num)%>>
+		<table>
+		<tr>
+			<td>Name</td>
+			<td>/<input type="text" name="name" value="<% echo(name)%>" size="25" maxlength="32" onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';" autocomplete="username"></td>
+			<td>E-Mail</td>
+			<td>/<input type="email" name="email" value="<% echo(email) %>" size="25" onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
+		</tr>
+		<tr>
+			<td>Title</td>
+			<td>/<input type="text" name="subject" size="25" value="<% echo(subj)%>" onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';" maxlength="32"></td>
+		</tr>
+		<tr>
+			<td colspan="4">Comment/ <small>(適当に改行を入れて下さい/半角<% echo(maxcom)%>文字以内)</small><br>
+			<textarea name="comment" rows="8" cols="70" wrap="soft" onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"><% echo(com)%></textarea></td>
+		</tr>
+		<tr>
+			<td>URL</td>
+			<td colspan="3">/<input type="url" name="url" value="<% echo(url)%>" size="65" onFocus="this.style.backgroundColor='#E0F0F0';" onBlur="this.style.backgroundColor='#FFFFFF';"></td>
+		</tr>
+		<tr>
+			<td>文字色</td>
+			<td colspan="3">/<% each(font)%><input type="radio" name="font" value="<% echo(font/color) %>"<% echo(font/chk)%>><span style="color:<% echo(font/color) %>">■</span><% /each %></td>
+		</tr>
+		<tr>
+			<td>枠線色</td>
+			<td colspan="3">/<% each(hr)%><input type="radio" name="hr" value="<% echo(hr/color) %>"<% echo(hr/chk) %>><span style="color:<% echo(hr/color) %>">■</span><% /each %></td>
+		</tr>
+		<tr>
+			<td>Icon</td>
+			<td colspan="2">/
+				<select name="ico">
+					<% each(icon)%><option value="<% echo(icon/file) %>"<% echo(icon/sel)%>><% echo(icon/name)%></option><% /each %>
+				</select><small>(画像を選択/<a href="<% echo(self) %>?mode=img" target="_blank">サンプル一覧</a>)</small>
+			</td>
+			<td><input type="submit" value="送 信" onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+		<input type=reset value="リセット" onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';"></td>
+		</tr>
+	</table>
+</form>
 <!--編集モード 終了-->
 <% /def %>
 
