@@ -8,7 +8,8 @@ PHP7では動作しないPHP4の掲示板、PHP-I-BOARDをphp8.0でも動くよ�
 
 ### テンプレートエンジンをSkinny.phpに変更
 
-htmltemplate.inc v1.31も、php7では動作せず、POTI-board改のhtmltemplate.incでは記法があわず動作しないためテンプレートエンジンを[Skinny.php](http://skinny.sx68.net/)に変更しました。
+htmltemplate.inc v1.31も、php7では動作せず、POTI-board改のhtmltemplate.incは記述方法が異なるためやはり動作しません。  
+それならテンプレートエンジンを[Skinny.php](http://skinny.sx68.net/)に変更したほうが早い…という事でテンプレートエンジンを変更しました。
 
 ### POTI-board改二のスパムフィルタ
 
