@@ -103,6 +103,7 @@
 				<input type="submit" value=" レスする " onmouseover="this.style.backgroundColor='#E0F0F0';" onmouseout="this.style.backgroundColor='#FFFFFF';">
 			</form>
 			<% def(oya/res) %>
+			<hr style="border-bottom:1px solid <% echo(oya/b_color)%>;border-top:none;" >
 			<div class="oya_res" style="border-color:<% echo (oya/b_color)%>;">
 				<% each(oya/res) %>
 					<h3 style="background-color:<% echo(oya/res/b_color)%>;">[<% echo(oya/res/num) %>] <% echo(oya/res/subj)%></h3>
