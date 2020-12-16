@@ -915,7 +915,8 @@ function htmloutput($template,$dat){
 
 // スタート！
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
-$mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : '';
+$mode = filter_input(INPUT_POST, 'mode');
+$mode = $mode ? $mode : filter_input(INPUT_GET, 'mode');
 
 switch ($mode) {
   // 書込み
