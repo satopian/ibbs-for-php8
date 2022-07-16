@@ -24,8 +24,8 @@
 // 2010/03/25 v1.8 メール通知機能追加
 /*
   ■使用方法　
-　　・ibbs.dat,icount.dat,ilog.logの属性を666か646にする。
-  　・過去ログ使用の場合は生成ﾃﾞｨﾚｸﾄﾘ（./ならpublic_html等)の属性777か757にする
+　　・ibbs.dat,icount.dat,ilog.logの属性を606か600にする。
+  　・過去ログ使用の場合は生成ﾃﾞｨﾚｸﾄﾘ（./ならpublic_html等)の属性707にする
 */
 require_once(__DIR__.'/Skinny.php');
 require(__DIR__.'/config.php');
@@ -334,6 +334,7 @@ function res_view($num) {
                     );
   }
   // 親記事
+  $rrcom='';
   list($num,$date,$name,$email,$subj,$com,$url,$col,$icon,$type,,$host) = explode("<>", $buf);
   list($color,$b_color) = explode(";", $col);
   if ($color == "") $color = NOCOL;
@@ -350,7 +351,8 @@ function res_view($num) {
   // 親記事格納
   $arg = array('res'=>$rres,'num'=>$num,'date'=>$date,'name'=>$name,'email'=>$email,
                 'subj'=>$subj,'com'=>$com,'b_color'=>$b_color,'color'=>$color,'oyaicon'=>I_DIR.$icon,'url'=>$url,
-                'page'=>$_GET['page'],'rsubj'=>"Re: $subj", 'rcom'=>$rrcom,'host'=>$host
+                'page'=>(string)filter_input(INPUT_GET,'page'),
+				'rsubj'=>"Re: $subj", 'rcom'=>$rrcom,'host'=>$host
                 );
   $arg['res_def'] = RESEVERY;
   $arg['res_mode'] = true;
@@ -512,7 +514,7 @@ function log_write($post) {
   // 新No.
   $newnum = $num+1;
   $font = $post['font'].";".$post['hr'];
-  $post['pass'] = crypt($post['delkey'], my_crypt($post['delkey']));
+  $post['pass'] = password_hash($post['delkey'], PASSWORD_BCRYPT, ["cost" => 5]);
   // 先頭用データ、記事データ生成
   $newfline = "$newnum<>{$post['name']}<>{$post['comment']}<>{$post['ip']}<>".time()."\n";
   $newline = "$newnum<>{$post['now']}<>{$post['name']}<>{$post['email']}<>{$post['subject']}<>{$post['comment']}<>{$post['url']}<>$font<>{$post['ico']}<>{$post['type']}<>{$post['pass']}<>{$post['ip']}<><>\n";
@@ -624,8 +626,10 @@ function del() {
 
 	if (ADMINPASS != $_POST['delkey']) {
 		if ($cpass == "") error("この記事には削除キーが存在しません!");
-		if ($cpass != crypt($_POST['delkey'], $cpass)) error("パスワードが違います!");
+		if(!password_verify($_POST['delkey'], $cpass)){
+			error("パスワードが違います!");
 		}
+	}
 		$lines[$i] = ($type != "0") ? "" : "$num<><><><><><><><><>$num<><><>\n";
 		$find = true;
 		}
@@ -650,7 +654,9 @@ function edit() {
     if ($num == $del) {
       if (ADMINPASS != $delkey) {
         if ($cpass == "") error("この記事には削除キーが存在しません!");
-        if ($cpass != crypt($delkey, $cpass)) error("パスワードが違います!");
+		if(!password_verify($_POST['delkey'], $cpass)){
+			error("パスワードが違います!");
+		}
       }
       $find = true;
       break;
@@ -678,7 +684,7 @@ function rewrite($post, $target) {
 	foreach($lines as $i =>$val){
 		if($i==0)continue;
     list($num,$now,,,,,,,,$type,$cpass,) = explode("<>", $lines[$i]);
-    if ($num == $target && ($cpass == crypt($post['delkey'], $cpass) || $post['delkey'] == ADMINPASS)) {
+    if ($num == $target && ((password_verify($_POST['delkey'], $cpass)) || $post['delkey'] == ADMINPASS)) {
       $find = true;
       $font = $post['font'].";".$post['hr'];
       $lines[$i] = "$num<>$now<>{$post['name']}<>{$post['email']}<>{$post['subject']}<>{$post['comment']}<>{$post['url']}<>$font<>{$post['ico']}<>$type<>$cpass<>{$post['ip']}<><>\n";
@@ -885,13 +891,13 @@ function autolink($str) {
 }
 
 /*-- 暗号化関数 --*/
-function my_crypt($str) {
-  $time = time();
-  list($p1, $p2) = unpack("C2", $time);
-  $wk = $time / (7*86400) + $p1 + $p2 - 8;
-  $saltset = array_merge(range('a', 'z'),range('A', 'Z'),range('0', '9'),array('/'));
-  return $saltset[$wk % 64] . $saltset[$time % 64];
-}
+// function my_crypt($str) {
+//   $time = time();
+//   list($p1, $p2) = unpack("C2", $time);
+//   $wk = round($time / (7*86400)) + $p1 + $p2 - 8;
+//   $saltset = array_merge(range('a', 'z'),range('A', 'Z'),range('0', '9'),array('/'));
+//   return $saltset[$wk % 64] . $saltset[$time % 64];
+// }
 /*-- エラー表示 --*/
 function error($str) {
   $arg['error'] = $str;
